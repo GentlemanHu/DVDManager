@@ -1,9 +1,8 @@
-import model.DVD;
-import model.Reader;
-import usage.DVDOperate;
-import usage.State;
+package god.hu;
 
-import java.util.Scanner;
+import god.hu.model.DVD;
+import god.hu.usage.DVDOperate;
+import god.hu.usage.State;
 
 public class Main {
     public static void main(String[] args) throws Exception {

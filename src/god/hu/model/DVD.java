@@ -1,6 +1,6 @@
-package model;
+package god.hu.model;
 
-import usage.State;
+import god.hu.usage.State;
 
 public class DVD {
     private Time time;
@@ -53,12 +53,13 @@ public class DVD {
             this.name = name;
             return this;
         }
-        public Builder setState(State state){
+
+        public Builder setState(State state) {
             this.state = state;
             return this;
         }
 
-        public DVD build(){
+        public DVD build() {
             dvd = new DVD();
             dvd.setState(State.ON_SHELF);
             dvd.setTime(time);

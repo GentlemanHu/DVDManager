@@ -1,7 +1,7 @@
-package usage;
+package god.hu.usage;
 
-import model.DVD;
-import model.Time;
+import god.hu.model.DVD;
+import god.hu.model.Time;
 
 public interface ReaderOperate {
     DVD borrow(int id);

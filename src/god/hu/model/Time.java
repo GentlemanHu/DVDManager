@@ -1,4 +1,4 @@
-package model;
+package god.hu.model;
 
 public class Time{
   public Integer getBorrowTime() {

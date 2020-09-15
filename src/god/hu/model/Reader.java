@@ -1,6 +1,6 @@
-package model;
+package god.hu.model;
 
-import usage.ReaderOperate;
+import god.hu.usage.ReaderOperate;
 
 import java.util.ArrayList;
 

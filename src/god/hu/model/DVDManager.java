@@ -1,7 +1,7 @@
-package model;
+package god.hu.model;
 
-import usage.DVDOperate;
-import usage.State;
+import god.hu.usage.DVDOperate;
+import god.hu.usage.State;
 
 import java.util.ArrayList;
 
