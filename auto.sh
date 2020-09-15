@@ -8,3 +8,4 @@ else
 fi
 
 git push -u origin master
+echo ">>>>>ok>>>>>"
