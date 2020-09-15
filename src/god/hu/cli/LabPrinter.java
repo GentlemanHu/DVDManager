@@ -21,7 +21,7 @@ public class LabPrinter implements TablePrint {
         TableRender render = new TableRender();
         render.setShowVerticalLines(true);
         render.setHeaders("STATE","NAME","TIME");
-        manager.getDvds().stream().forEach((x)->render.addRow(x.getName(),x.getState().toString(),x.getTime().toString()));
+        manager.getDvds().stream().forEach((x)->render.addRow(x.getName(),x.getState().toString(),x.getTime().getBorrowTime().toString()));
         render.print();
     }
 
