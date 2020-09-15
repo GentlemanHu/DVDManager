@@ -1,5 +1,7 @@
 package god.hu.cli;
 
+import god.hu.model.DVD;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -88,6 +90,7 @@ public class TableRender {
         }
         System.out.println();
     }
+
 
     public static class Builder {
         private TableRender render;

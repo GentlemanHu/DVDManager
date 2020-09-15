@@ -6,6 +6,38 @@ import god.hu.usage.State;
 import java.util.ArrayList;
 
 public class DVDManager implements DVDOperate {
+  public ArrayList<DVD> getDvds() {
+    return dvds;
+  }
+
+  public void setDvds(ArrayList<DVD> dvds) {
+    this.dvds = dvds;
+  }
+
+  public ArrayList<Reader> getReaders() {
+    return readers;
+  }
+
+  public void setReaders(ArrayList<Reader> readers) {
+    this.readers = readers;
+  }
+
+  public DVD getBorrow() {
+    return borrow;
+  }
+
+  public void setBorrow(DVD borrow) {
+    this.borrow = borrow;
+  }
+
+  public DVD getRevert() {
+    return revert;
+  }
+
+  public void setRevert(DVD revert) {
+    this.revert = revert;
+  }
+
   private ArrayList<DVD> dvds;
   private ArrayList<Reader> readers;
   private DVD borrow,revert;

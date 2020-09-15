@@ -1,13 +1,20 @@
 package test;
 
+import god.hu.cli.LabPrinter;
 import god.hu.cli.TableRender;
+
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TestOne {
     private static TableRender render = new TableRender();
-
-    public static void main(String[] args) {
-        // testOne();
+    public static void main(String[] args) throws Exception{
+        //testOne();
+        //findFlower();
+        //findFlower2();
        // printStar(10);
+        LabPrinter printer = new LabPrinter();
+        printer.printTable();
     }
 
     public static void testOne() {
@@ -30,6 +37,33 @@ public class TestOne {
         render.print();
     }
 
+    public static void findFlower2(){
+        int num = 100; int a[] = new int[3];
+        System.out.print("3位的水仙花数有：\t");
+        while (num <= 999) {
+            int sum =0;
+            a[0] = num / 100 % 10;
+            a[1] = num / 10 % 10;
+            a[2] = num % 10;
+            for (int i = 0; i < 3; i++) {
+                sum = sum + (int) Math.pow(a[i], 3);
+            }
+            if (num ==sum) {
+                System.out.print(num + "\t"); } num++;
+        }
+    }
+
+
+   // 1^3+5^3+3^3=153
+    public static void findFlower(){
+            for (int o=0;o<1000;o++)
+                for (int t=0;t<1000;t++)
+                    for(int r=0;r<1000;r++)
+                        if(Math.pow(o,3)+Math.pow(t,3)+Math.pow(r,3)==(o*100+t*10+r))
+                            System.out.println("first:"+o+"second:"+t+"third:"+r);
+    }
+
+
     // hundred chickens
     public static void getChick() {
         for (int x = 0; x < 20; x++)
@@ -39,6 +73,19 @@ public class TestOne {
                         System.out.println("cock:" + x + "hen:" + y + "chick:" + z);
     }
 
+
+
+    // always print star
+    public static void alwaysPrintStar(){
+        for(;;){
+            printStar(ThreadLocalRandom.current().nextInt(3,20));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     // print starts
     public static void printStar(int lines) {
         for (int i = 0; i < lines; i++) {
