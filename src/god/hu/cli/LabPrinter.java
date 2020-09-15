@@ -8,22 +8,19 @@ import god.hu.usage.State;
 import god.hu.usage.TablePrint;
 
 public class LabPrinter implements TablePrint {
-    private Lab lab = Lab.getLab();
+    private Lab lab;
     private DVDManager manager;
 
     public LabPrinter(){
-        manager = Lab.getManager();
-        manager.addDVD(new DVD.Builder().setName("Nice").setState(State.ON_SHELF).setTime(new Time()).build());
-        manager.addDVD(new DVD.Builder().setName("One").setState(State.ON_SHELF).setTime(new Time()).build());
-        manager.addDVD(new DVD.Builder().setName("Two").setState(State.ON_SHELF).setTime(new Time()).build());
-        manager.addDVD(new DVD.Builder().setName("Three").setState(State.ON_SHELF).setTime(new Time()).build());
+        this.lab = Lab.getLab();
+        manager = Lab.getLab().getManager();
     }
 
     @Override
     public void printTable() {
         TableRender render = new TableRender();
         render.setShowVerticalLines(true);
-        render.setHeaders("ID","NAME","TIME");
+        render.setHeaders("STATE","NAME","TIME");
         manager.getDvds().stream().forEach((x)->render.addRow(x.getName(),x.getState().toString(),x.getTime().toString()));
         render.print();
     }

@@ -28,4 +28,31 @@ public class Time{
   private Integer borrowTime;
   private Integer revertTime;
   private Integer renewTime;
+
+  public static class Builder{
+    private Integer borrowTime;
+    private Integer revertTime;
+    private Integer renewTime;
+    private Time time;
+    public Builder setBorrowTime(Integer time){
+      this.borrowTime = time;
+      return this;
+    }
+    public Builder setRevertTime(Integer time){
+      this.revertTime = time;
+      return this;
+    }
+    public Builder setRenewTime(Integer time){
+      this.renewTime = time;
+      return this;
+    }
+
+    public Time build(){
+      this.time = new Time();
+      time.setBorrowTime(borrowTime);
+      time.setRenewTime(renewTime);
+      time.setRevertTime(revertTime);
+      return time;
+    }
+  }
 }

@@ -13,8 +13,7 @@ public class TestOne {
         //findFlower();
         //findFlower2();
        // printStar(10);
-        LabPrinter printer = new LabPrinter();
-        printer.printTable();
+
     }
 
     public static void testOne() {

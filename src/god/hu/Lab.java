@@ -18,11 +18,11 @@ public class Lab {
         }
     }
 
-    public static DVDManager getManager() {
+    public DVDManager getManager() {
         return manager;
     }
 
-    public static DVDOperate getDealer() {
+    public  DVDOperate getDealer() {
         return dealer;
     }
 
