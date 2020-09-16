@@ -31,11 +31,9 @@ public class Main {
         try {
             run();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(ConsoleColors.YELLOW + "失败!请重试或者联系管理员.");
+            System.out.println(ConsoleColors.YELLOW + "-退出系统-");
             System.out.println("GodLin's Manager 重置中...");
             System.out.println("Done!");
-            System.out.println("请重新运行~");
         }
     }
 
@@ -50,8 +48,6 @@ public class Main {
         int number;
         init();
         for (; ; ) {
-            if (scanner.next().equals("exit"))
-                System.exit(0);
             number = scanner.nextInt();
             if (!isInCMDList(number))
                 number = 0;
