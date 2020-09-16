@@ -6,6 +6,15 @@ public class DVD {
     private Time time;
     private State state;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    private Integer id;
     public String getName() {
         return name;
     }
@@ -40,6 +49,7 @@ public class DVD {
         private Time time;
         private State state;
         private String name;
+        private Integer id;
 
         public Builder() {
         }
@@ -59,11 +69,16 @@ public class DVD {
             return this;
         }
 
+        public Builder setID(Integer id){
+            this.id = id;
+            return this;
+        }
         public DVD build() {
             dvd = new DVD();
             dvd.setState(State.ON_SHELF);
             dvd.setTime(time);
             dvd.setName(name);
+            dvd.setId(id);
             return dvd;
         }
     }

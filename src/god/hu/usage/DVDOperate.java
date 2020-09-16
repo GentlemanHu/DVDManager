@@ -17,5 +17,7 @@ public interface DVDOperate {
 
     void removeDVD(DVD dvd);
 
+    void removeDVDById(Integer id);
+
     void renew(int id,Time time);
 }

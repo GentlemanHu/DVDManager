@@ -1,34 +1,57 @@
 package god.hu;
 
+import god.hu.cli.ConsoleColors;
 import god.hu.cli.LabPrinter;
 import god.hu.model.DVD;
 import god.hu.model.DVDManager;
+import god.hu.model.ManagerMediator;
 import god.hu.model.Time;
 import god.hu.usage.DVDOperate;
 import god.hu.usage.State;
 
+import java.awt.*;
+import java.io.Console;
 import java.util.Scanner;
 
 public class Main {
-    private static LabPrinter printer = new LabPrinter();
-    private static DVDManager manager = Lab.getLab().getManager();
-    private static Scanner scanner = new Scanner(System.in);
+    private static final LabPrinter printer = new LabPrinter();
+    private static final DVDManager manager = Lab.getLab().getManager();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final ManagerMediator mediator = new ManagerMediator(manager);
 
     public static void main(String[] args) throws Exception {
-        run();
+//        Console console = System.console();
+//        if (console == null && !GraphicsEnvironment.isHeadless()) {
+//            String filename = "D:\\own\\DVDManager\\out\\production\\DVDManager\\god\\hu\\Main.class";
+//            Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", "cmd", "/k", "java  \"" + filename + "\""});
+//        } else {
+//            Main.main(new String[0]);
+//            System.out.println("Program has ended, please type 'exit' to close the console");
+//        }
+        try {
+            run();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(ConsoleColors.YELLOW + "失败!请重试或者联系管理员.");
+            System.out.println("GodLin's Manager 重置中...");
+            System.out.println("Done!");
+            System.out.println("请重新运行~");
+        }
     }
 
     public static void init() {
-        manager.addDVD(new DVD.Builder().setState(State.ON_SHELF).setName("Wang2").setTime(new Time.Builder().setBorrowTime(1).build()).build());
-        manager.addDVD(new DVD.Builder().setState(State.ON_SHELF).setName("Wang3").setTime(new Time.Builder().setBorrowTime(2).build()).build());
-        manager.addDVD(new DVD.Builder().setState(State.ON_SHELF).setName("Wang4").setTime(new Time.Builder().setBorrowTime(3).build()).build());
+        manager.addDVD(new DVD.Builder().setID(1).setState(State.ON_SHELF).setName("Wang2").setTime(new Time.Builder().setBorrowTime(1).build()).build());
+        manager.addDVD(new DVD.Builder().setID(2).setState(State.ON_SHELF).setName("Wang3").setTime(new Time.Builder().setBorrowTime(2).build()).build());
+        manager.addDVD(new DVD.Builder().setID(3).setState(State.ON_SHELF).setName("Wang4").setTime(new Time.Builder().setBorrowTime(3).build()).build());
         printer.printHelp();
     }
 
-    public static void run() throws Exception {
+    public static void run() {
         int number;
         init();
         for (; ; ) {
+            if (scanner.next().equals("exit"))
+                System.exit(0);
             number = scanner.nextInt();
             if (!isInCMDList(number))
                 number = 0;
@@ -37,10 +60,15 @@ public class Main {
                     printer.printHelp();
                     break;
                 case 1:
+                    mediator.addDVD(scanner);
                     printer.printTable();
                     break;
                 case 2:
-                    printer.printCurrent();
+                    mediator.removeDVDById(scanner);
+                    printer.printTable();
+                    break;
+                case 9:
+                    printer.printTable();
                     break;
                 default:
                     printer.printHelp();
@@ -54,6 +82,6 @@ public class Main {
     }
 
     public static boolean isInCMDList(int i) {
-        return i == 0 || i == 1 || i == 2 || i == 3;
+        return i == 0 || i == 1 || i == 2 || i == 3 || i == 9;
     }
 }

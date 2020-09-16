@@ -20,8 +20,8 @@ public class LabPrinter implements TablePrint {
     public void printTable() {
         TableRender render = new TableRender();
         render.setShowVerticalLines(true);
-        render.setHeaders("STATE","NAME","TIME");
-        manager.getDvds().stream().forEach((x)->render.addRow(x.getName(),x.getState().toString(),x.getTime().getBorrowTime().toString()));
+        render.setHeaders("ID","NAME","STATE","TIME");
+        manager.getDvds().forEach((x)->render.addRow(x.getId().toString(),x.getName(),x.getState().toString(),x.getTime().getBorrowTime().toString()+"d"));
         render.print();
         printArrow();
     }
@@ -34,7 +34,7 @@ public class LabPrinter implements TablePrint {
 
     public void printHelp(){
         System.out.println(ConsoleColors.PURPLE+"---GodLin's Manager---"+ConsoleColors.RESET);
-        System.out.println(ConsoleColors.BLUE+"Help:\nSelect Number to input.\n0: Print Help Message.\n1: Add DVD to lab\n2: Delete DVD from lab\n3: Not Implemented yet!\n 选择`一个`数字来执行指令："+ConsoleColors.RESET);
+        System.out.println(ConsoleColors.BLUE+"Help:\nSelect Number to input.\n0: Print Help Message.\n1: Add DVD to lab\n2: Delete DVD from lab\n3: Not Implemented yet!\n9: Print Lab table\nexit: Exit System,退出系统\n 选择`一个`数字来执行指令："+ConsoleColors.RESET);
         printArrow();
     }
 

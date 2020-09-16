@@ -1,18 +1,12 @@
 package test;
 
-import god.hu.cli.LabPrinter;
 import god.hu.cli.TableRender;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TestOne {
     private static TableRender render = new TableRender();
     public static void main(String[] args) throws Exception{
-        //testOne();
-        //findFlower();
-        //findFlower2();
-       // printStar(10);
 
     }
 
