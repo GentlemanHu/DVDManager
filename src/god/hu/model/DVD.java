@@ -75,7 +75,7 @@ public class DVD {
         }
         public DVD build() {
             dvd = new DVD();
-            dvd.setState(State.ON_SHELF);
+            dvd.setState(state);
             dvd.setTime(time);
             dvd.setName(name);
             dvd.setId(id);

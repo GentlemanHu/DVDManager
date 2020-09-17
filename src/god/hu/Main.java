@@ -30,9 +30,9 @@ public class Main {
     }
 
     public static void init() {
-        manager.addDVD(new DVD.Builder().setID(1).setState(State.ON_SHELF).setName("Wang2").setTime(new Time.Builder().setBorrowTime(1).build()).build());
-        manager.addDVD(new DVD.Builder().setID(2).setState(State.ON_SHELF).setName("Wang3").setTime(new Time.Builder().setBorrowTime(2).build()).build());
-        manager.addDVD(new DVD.Builder().setID(3).setState(State.ON_SHELF).setName("Wang4").setTime(new Time.Builder().setBorrowTime(3).build()).build());
+        manager.addDVD(new DVD.Builder().setID(1).setState(State.ON_SHELF).setName("Sound of Nature").setTime(new Time.Builder().setBorrowTime(1).build()).build());
+        manager.addDVD(new DVD.Builder().setID(2).setState(State.NOT_AVAI).setName("TokyoHot").setTime(new Time.Builder().setBorrowTime(2).build()).build());
+        manager.addDVD(new DVD.Builder().setID(3).setState(State.ON_SHELF).setName("Java101").setTime(new Time.Builder().setBorrowTime(3).build()).build());
         printer.printHelp();
     }
 
