@@ -12,6 +12,7 @@ import god.hu.usage.State;
 import java.awt.*;
 import java.io.Console;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
     private static final LabPrinter printer = new LabPrinter();
@@ -20,20 +21,11 @@ public class Main {
     private static final ManagerMediator mediator = new ManagerMediator(manager);
 
     public static void main(String[] args) throws Exception {
-//        Console console = System.console();
-//        if (console == null && !GraphicsEnvironment.isHeadless()) {
-//            String filename = "D:\\own\\DVDManager\\out\\production\\DVDManager\\god\\hu\\Main.class";
-//            Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", "cmd", "/k", "java  \"" + filename + "\""});
-//        } else {
-//            Main.main(new String[0]);
-//            System.out.println("Program has ended, please type 'exit' to close the console");
-//        }
         try {
             run();
         } catch (Exception e) {
-            System.out.println(ConsoleColors.YELLOW + "-退出系统-");
-            System.out.println("GodLin's Manager 重置中...");
-            System.out.println("Done!");
+            System.out.println(ConsoleColors.GREEN+"ERROR!-异常-\n请联系管理员或重新尝试~"+ConsoleColors.RESET);
+            exit();
         }
     }
 
@@ -45,31 +37,21 @@ public class Main {
     }
 
     public static void run() {
-        int number;
         init();
+        String tmp = "";
+        int number = 0;
         for (; ; ) {
-            number = scanner.nextInt();
-            if (!isInCMDList(number))
-                number = 0;
-            switch (number) {
-                case 0:
-                    printer.printHelp();
-                    break;
-                case 1:
-                    mediator.addDVD(scanner);
-                    printer.printTable();
-                    break;
-                case 2:
-                    mediator.removeDVDById(scanner);
-                    printer.printTable();
-                    break;
-                case 9:
-                    printer.printTable();
-                    break;
-                default:
-                    printer.printHelp();
-                    break;
+            tmp = scanner.next();
+            if (isNumber(tmp) && tmp.length() == 1)
+                number = Integer.parseInt(tmp);
+            else if(tmp.equals("exit"))
+                exit();
+            else {
+                System.out.println("-输入无效-\n输入\"0\"查看帮助");
+                printer.printArrow();
+                continue;
             }
+            commandSelector(number);
         }
     }
 
@@ -79,5 +61,40 @@ public class Main {
 
     public static boolean isInCMDList(int i) {
         return i == 0 || i == 1 || i == 2 || i == 3 || i == 9;
+    }
+
+    public static boolean isNumber(String s) {
+        return s.matches("[0-9]+");
+    }
+
+    public static void exit(){
+        System.out.println(ConsoleColors.YELLOW + "-退出系统-");
+        System.out.println("GodLin's Manager 重置中...");
+        System.out.println("Done!");
+        System.exit(0);
+    }
+
+    public static void commandSelector(int number){
+        if (!isInCMDList(number))
+            number = 0;
+        switch (number) {
+            case 0:
+                printer.printHelp();
+                break;
+            case 1:
+                mediator.addDVD(scanner);
+                printer.printTable();
+                break;
+            case 2:
+                mediator.removeDVDById(scanner);
+                printer.printTable();
+                break;
+            case 9:
+                printer.printTable();
+                break;
+            default:
+                printer.printHelp();
+                break;
+        }
     }
 }

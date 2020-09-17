@@ -78,6 +78,8 @@ public class DVDManager implements DVDOperate {
 
     @Override
     public void removeDVDById(Integer id) {
+        if (id > dvds.get(dvds.size()).getId())
+            throw new IndexOutOfBoundsException();
         dvds.remove(id-1);
     }
 
