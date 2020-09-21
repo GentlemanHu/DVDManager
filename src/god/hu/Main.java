@@ -55,25 +55,6 @@ public class Main {
         }
     }
 
-    public static void msg(String msg) {
-        System.out.println(msg);
-    }
-
-    public static boolean isInCMDList(int i) {
-        return i == 0 || i == 1 || i == 2 || i == 3 || i == 9;
-    }
-
-    public static boolean isNumber(String s) {
-        return s.matches("[0-9]+");
-    }
-
-    public static void exit(){
-        System.out.println(ConsoleColors.YELLOW + "-退出系统-");
-        System.out.println("GodLin's Manager 重置中...");
-        System.out.println("Done!");
-        System.exit(0);
-    }
-
     public static void commandSelector(int number){
         if (!isInCMDList(number))
             number = 0;
@@ -96,5 +77,24 @@ public class Main {
                 printer.printHelp();
                 break;
         }
+    }
+
+    public static void exit(){
+        System.out.println(ConsoleColors.YELLOW + "-退出系统-");
+        System.out.println("GodLin's Manager 重置中...");
+        System.out.println("Done!");
+        System.exit(0);
+    }
+
+    public static void msg(String msg) {
+        System.out.println(msg);
+    }
+
+    public static boolean isInCMDList(int i) {
+        return i == 0 || i == 1 || i == 2 || i == 3 || i == 9;
+    }
+
+    public static boolean isNumber(String s) {
+        return s.matches("[0-9]+");
     }
 }
