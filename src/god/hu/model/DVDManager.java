@@ -6,19 +6,19 @@ import god.hu.usage.State;
 import java.util.ArrayList;
 
 public class DVDManager implements DVDOperate {
-    public ArrayList<DVD> getDvds() {
+    public OwnList<DVD> getDvds() {
         return dvds;
     }
 
-    public void setDvds(ArrayList<DVD> dvds) {
+    public void setDvds(OwnList<DVD> dvds) {
         this.dvds = dvds;
     }
 
-    public ArrayList<Reader> getReaders() {
+    public OwnList<Reader> getReaders() {
         return readers;
     }
 
-    public void setReaders(ArrayList<Reader> readers) {
+    public void setReaders(OwnList<Reader> readers) {
         this.readers = readers;
     }
 
@@ -39,8 +39,8 @@ public class DVDManager implements DVDOperate {
     }
 
     public DVDManager() {
-        dvds = new ArrayList<DVD>();
-        readers = new ArrayList<Reader>();
+        dvds = new OwnList<DVD>();
+        readers = new OwnList<Reader>();
     }
 
     @Override
@@ -55,14 +55,14 @@ public class DVDManager implements DVDOperate {
 
     @Override
     public DVD borrow(int id) {
-        dvds.get(id).setState(State.NOT_AVAI);
-        return dvds.get(id);
+        ((DVD)dvds.get(id)).setState(State.NOT_AVAI);
+        return (DVD)dvds.get(id);
     }
 
     @Override
     public DVD revert(int id) {
-        dvds.get(id).setState(State.ON_SHELF);
-        return dvds.get(id);
+        ((DVD)dvds.get(id)).setState(State.ON_SHELF);
+        return (DVD)dvds.get(id);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class DVDManager implements DVDOperate {
         dvds.get(id).setTime(time);
     }
 
-    private volatile ArrayList<DVD> dvds;
-    private ArrayList<Reader> readers;
+    private volatile OwnList<DVD> dvds;
+    private OwnList<Reader> readers;
     private DVD borrow, revert;
 }

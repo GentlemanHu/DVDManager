@@ -11,6 +11,7 @@ import god.hu.usage.State;
 
 import java.awt.*;
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,7 @@ public class Main {
         try {
             run();
         } catch (Exception e) {
-            System.out.println(ConsoleColors.GREEN+"ERROR!-异常-\n请联系管理员或重新尝试~"+ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN + "ERROR!-异常-\n请联系管理员或重新尝试~" + ConsoleColors.RESET);
             exit();
         }
     }

@@ -2,11 +2,9 @@ package god.hu.model;
 
 import god.hu.usage.ReaderOperate;
 
-import java.util.ArrayList;
-
 public class Reader implements ReaderOperate {
     private String name;
-    private ArrayList<DVD> own;
+    private OwnList<DVD> own;
     private DVDManager manager;
 
     public Reader() {
@@ -24,11 +22,11 @@ public class Reader implements ReaderOperate {
         this.name = name;
     }
 
-    public ArrayList<DVD> getOwn() {
+    public OwnList<DVD> getOwn() {
         return own;
     }
 
-    public void setOwn(ArrayList<DVD> own) {
+    public void setOwn(OwnList<DVD> own) {
         this.own = own;
     }
 
