@@ -7,5 +7,5 @@ else
   git commit -am "update@$(date)"
 fi
 
-git push -u origin master
+git push --all origin
 echo ">>>>>ok>>>>>"

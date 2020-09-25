@@ -1,7 +1,7 @@
 package god.hu.model;
 
-import god.hu.usage.DVDOperate;
-import god.hu.usage.State;
+import god.hu.usage.abs.DVDOperate;
+import god.hu.usage.abs.State;
 
 import java.util.ArrayList;
 

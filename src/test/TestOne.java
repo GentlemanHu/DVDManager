@@ -1,13 +1,20 @@
 package test;
 
-import god.hu.cli.TableRender;
+import god.hu.usage.tool.SerialNumberGenerator;
+import god.hu.usage.tool.cli.TableRender;
+import org.junit.Test;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TestOne {
     private static TableRender render = new TableRender();
-    public static void main(String[] args) throws Exception{
 
+    @Test
+    public void testSerial(){
+        for (int i = 0; i < 10; i++) {
+
+            System.out.println(new SerialNumberGenerator(7).generate());
+        }
     }
 
     public static void testOne() {

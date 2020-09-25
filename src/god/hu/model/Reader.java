@@ -1,11 +1,12 @@
 package god.hu.model;
 
-import god.hu.usage.ReaderOperate;
+import god.hu.usage.abs.ReaderOperate;
 
 import java.util.ArrayList;
 
 public class Reader implements ReaderOperate {
     private String name;
+    private Integer id;
     private ArrayList<DVD> own;
     private DVDManager manager;
 
@@ -30,6 +31,14 @@ public class Reader implements ReaderOperate {
 
     public void setOwn(ArrayList<DVD> own) {
         this.own = own;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override

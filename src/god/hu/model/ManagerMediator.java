@@ -1,9 +1,10 @@
 package god.hu.model;
 
-import god.hu.cli.ConsoleColors;
-import god.hu.usage.DVDMediatorOperate;
-import god.hu.usage.State;
+import god.hu.usage.tool.cli.ConsoleColors;
+import god.hu.usage.abs.DVDMediatorOperate;
+import god.hu.usage.abs.State;
 
+import java.util.Date;
 import java.util.Scanner;
 
 public class ManagerMediator implements DVDMediatorOperate {
@@ -46,7 +47,7 @@ public class ManagerMediator implements DVDMediatorOperate {
         dvd.setState(sc.nextInt() == 0 ? State.ON_SHELF : State.NOT_AVAI);
         System.out.println("请输入时间:(如1d就写1,2d就写2...)");
         printArrow();
-        dvd.setTime(new Time.Builder().setBorrowTime(sc.nextInt()).build());
+        dvd.setTime(new Time.Builder().setBorrowTime(new Date().toString()).build());
         manager.addDVD(dvd);
     }
 

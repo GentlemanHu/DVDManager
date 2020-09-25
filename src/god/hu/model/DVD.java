@@ -1,6 +1,6 @@
 package god.hu.model;
 
-import god.hu.usage.State;
+import god.hu.usage.abs.State;
 
 public class DVD {
     private Time time;
