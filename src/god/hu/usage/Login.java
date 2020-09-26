@@ -9,10 +9,16 @@ public class Login {
     }
 
     public static Identity auth(Scanner sc) {
-        if (sc.next().equals("admin"))
-            return Identity.MANAGER;
-        if (sc.next().equals("reader"))
-            return Identity.READER;
-        else return Identity.UNDEFINED;
+        switch (sc.next()){
+            case "admin":
+                return Identity.MANAGER;
+            case "reader":
+                return Identity.READER;
+            case "exit":
+                System.out.println("退出系统");
+                System.exit(0);
+            default:
+                return Identity.UNDEFINED;
+        }
     }
 }

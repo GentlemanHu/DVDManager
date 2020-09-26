@@ -1,6 +1,7 @@
 package god.hu.usage.tool;
 
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Random;
 
 public class SerialNumberGenerator {
@@ -18,13 +19,14 @@ public class SerialNumberGenerator {
 
     /**
      * Generates random serial number on the fry
+     *
      * @param length Defines how long your serial number can be
      */
-    public SerialNumberGenerator(int length){
+    public SerialNumberGenerator(int length) {
         LENGTH = length;
     }
 
-    public SerialNumberGenerator split(int splitInto, char splitter){
+    public SerialNumberGenerator split(int splitInto, char splitter) {
         this.splitInto = splitInto;
         this.splitter = splitter;
         isToSplit = true;
@@ -32,15 +34,15 @@ public class SerialNumberGenerator {
     }
 
     private String split() throws InvalidSerialNumberLengthException {
-        if(LENGTH % splitInto != 0){
+        if (LENGTH % splitInto != 0) {
             throw new InvalidSerialNumberLengthException();
         }
 
         StringBuilder sb = new StringBuilder();
         int spacer = 0, tempLength = LENGTH;
 
-        while(tempLength > 0){
-            if(spacer == (LENGTH / splitInto)){
+        while (tempLength > 0) {
+            if (spacer == (LENGTH / splitInto)) {
                 sb.append(splitter);
                 spacer = 0;
             }
@@ -59,12 +61,12 @@ public class SerialNumberGenerator {
     /**
      * Generates random char string
      */
-    public String generate(){
+    public String generate() {
 
         StringBuilder serial = new StringBuilder();
 
 //        check if need splitting serial number
-        if(isToSplit){
+        if (isToSplit) {
             try {
                 return split();
             } catch (InvalidSerialNumberLengthException e) {
@@ -79,6 +81,9 @@ public class SerialNumberGenerator {
         return serial.toString();
     }
 
+    public Integer getNumber() {
+        return -(int) (System.currentTimeMillis());
+    }
 
     @Override
     public String toString() {
@@ -86,7 +91,7 @@ public class SerialNumberGenerator {
     }
 
     private static class InvalidSerialNumberLengthException extends Exception {
-        InvalidSerialNumberLengthException(){
+        InvalidSerialNumberLengthException() {
             super("Serial number length must be divisible by the number of parts to perform split action.");
         }
     }

@@ -5,16 +5,26 @@ import god.hu.usage.abs.State;
 public class DVD {
     private Time time;
     private State state;
+    private Integer id;
+    private String name;
+
+    @Override
+    public String toString() {
+        return "DVD{" +
+                "time=" + time.getSerial() +
+                ", state=" + state +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
 
-    private Integer id;
     public String getName() {
         return name;
     }
@@ -22,8 +32,6 @@ public class DVD {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String name;
 
     public DVD() {
     }

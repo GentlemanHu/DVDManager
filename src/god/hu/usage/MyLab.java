@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class MyLab {
     private static final LabPrinter printer = new LabPrinter();
-    private static final DVDManager manager = Lab.getLab().getManager();
+    private static final DVDManager manager = Lab.getManager();
     private static final Scanner scanner = new Scanner(System.in);
     private static final ManagerMediator mediator = new ManagerMediator(manager);
     private static final SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
@@ -19,7 +19,7 @@ public class MyLab {
 
     public static void run() {
         for (; ; ) {
-            System.out.println(ConsoleColors.PURPLE+"---请选择登录身份---\n---admin(以管理员身份登录)---\n---reader(以读者身份进入)---"+ConsoleColors.RESET);
+            System.out.println(ConsoleColors.PURPLE + "---请选择登录身份---\n---admin(以管理员身份登录)---\n---reader(以读者身份进入)---\n---exit(退出)---" + ConsoleColors.RESET);
             printer.printArrow();
             switch (Login.auth(scanner)) {
                 case MANAGER:
@@ -28,9 +28,10 @@ public class MyLab {
                     break;
                 case READER:
                     System.out.println(ConsoleColors.RED + "login as reader" + ConsoleColors.RESET);
+                    asReader();
                     break;
                 case UNDEFINED:
-                    System.out.println(ConsoleColors.RED + "not login " + ConsoleColors.RESET);
+                    System.out.println(ConsoleColors.RED + "not login\n请重新输入登录信息! " + ConsoleColors.RESET);
                     break;
                 default:
                     break;
@@ -48,7 +49,10 @@ public class MyLab {
                 number = Integer.parseInt(tmp);
             else if (tmp.equals("exit"))
                 exit();
-            else {
+            else if (tmp.equals("logout")) {
+                System.out.println(ConsoleColors.PURPLE + "已成功登出" + ConsoleColors.RESET);
+                break;
+            } else {
                 System.out.println("-输入无效-\n输入\"0\"查看帮助");
                 printer.printArrow();
                 continue;
@@ -57,34 +61,38 @@ public class MyLab {
         }
     }
 
+    public static void asReader(){
+        printer.printHelp2();
+    }
+
     public static void init() {
-        manager.addDVD(
-                new DVD.Builder()
-                        .setID(1)
-                        .setState(State.ON_SHELF)
-                        .setName("Sound of Nature")
-                        .setTime(new Time.Builder()
-                                .setBorrowTime(formatter.format(new Date()))
-                                .build())
-                        .build());
-        manager.addDVD(
-                new DVD.Builder()
-                        .setID(2)
-                        .setState(State.NOT_AVAI)
-                        .setName("TokyoHot")
-                        .setTime(new Time.Builder()
-                                .setBorrowTime(formatter.format(new Date()))
-                                .build())
-                        .build());
-        manager.addDVD(
-                new DVD.Builder()
-                        .setID(3)
-                        .setState(State.ON_SHELF)
-                        .setName("Java101")
-                        .setTime(new Time.Builder()
-                                .setBorrowTime(formatter.format(new Date()))
-                                .build())
-                        .build());
+//        manager.addDVD(
+//                new DVD.Builder()
+//                        .setID(1)
+//                        .setState(State.ON_SHELF)
+//                        .setName("Sound of Nature")
+//                        .setTime(new Time.Builder()
+//                                .setBorrowTime(formatter.format(new Date()))
+//                                .build())
+//                        .build());
+//        manager.addDVD(
+//                new DVD.Builder()
+//                        .setID(2)
+//                        .setState(State.NOT_AVAI)
+//                        .setName("TokyoHot")
+//                        .setTime(new Time.Builder()
+//                                .setBorrowTime(formatter.format(new Date()))
+//                                .build())
+//                        .build());
+//        manager.addDVD(
+//                new DVD.Builder()
+//                        .setID(3)
+//                        .setState(State.ON_SHELF)
+//                        .setName("Java101")
+//                        .setTime(new Time.Builder()
+//                                .setBorrowTime(formatter.format(new Date()))
+//                                .build())
+//                        .build());
         printer.printHelp();
     }
 

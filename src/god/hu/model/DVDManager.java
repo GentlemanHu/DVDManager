@@ -1,5 +1,6 @@
 package god.hu.model;
 
+import god.hu.db.MDBOperator;
 import god.hu.usage.abs.DVDOperate;
 import god.hu.usage.abs.State;
 
@@ -41,6 +42,7 @@ public class DVDManager implements DVDOperate {
     public DVDManager() {
         dvds = new ArrayList<DVD>();
         readers = new ArrayList<Reader>();
+        operator = new MDBOperator();
     }
 
     @Override
@@ -68,6 +70,7 @@ public class DVDManager implements DVDOperate {
     @Override
     public void addDVD(DVD dvd) {
         dvds.add(dvd);
+        operator.addDVD(dvd);
     }
 
     @Override
@@ -78,9 +81,10 @@ public class DVDManager implements DVDOperate {
 
     @Override
     public void removeDVDById(Integer id) {
-        if (id > dvds.get(dvds.size()-1).getId())
-            throw new IndexOutOfBoundsException();
-        dvds.remove(id-1);
+//        if (id > dvds.get(dvds.size()-1).getId())
+//            throw new IndexOutOfBoundsException();
+//        dvds.remove(id-1);
+        operator.removeDVDById(id);
     }
 
     @Override
@@ -91,4 +95,5 @@ public class DVDManager implements DVDOperate {
     private volatile ArrayList<DVD> dvds;
     private ArrayList<Reader> readers;
     private DVD borrow, revert;
+    private final MDBOperator operator;
 }

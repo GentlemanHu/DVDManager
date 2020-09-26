@@ -1,15 +1,17 @@
 package god.hu.model;
 
+import god.hu.usage.tool.SerialNumberGenerator;
 import god.hu.usage.tool.cli.ConsoleColors;
 import god.hu.usage.abs.DVDMediatorOperate;
 import god.hu.usage.abs.State;
 
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ManagerMediator implements DVDMediatorOperate {
     private DVDManager manager;
-
+    private SerialNumberGenerator generator=new SerialNumberGenerator(7);
     public ManagerMediator(DVDManager manager) {
         this.manager = manager;
     }
@@ -38,16 +40,16 @@ public class ManagerMediator implements DVDMediatorOperate {
 
     public void addDVD(Scanner sc) {
         DVD dvd = new DVD();
-        dvd.setId(manager.getDvds().get(manager.getDvds().size() - 1).getId() + 1);
+        dvd.setId(generator.getNumber());
         System.out.println("请输入DVD名称:(如:黄家驹全集)");
         printArrow();
         dvd.setName(sc.next());
         System.out.println("请输入状态:(0为在库,1为不可借)");
         printArrow();
         dvd.setState(sc.nextInt() == 0 ? State.ON_SHELF : State.NOT_AVAI);
-        System.out.println("请输入时间:(如1d就写1,2d就写2...)");
         printArrow();
-        dvd.setTime(new Time.Builder().setBorrowTime(new Date().toString()).build());
+        dvd.setTime(new Time.Builder().setSerial(generator.generate()).setId(generator.getNumber()).build());
+        System.out.println(dvd.toString());
         manager.addDVD(dvd);
     }
 
