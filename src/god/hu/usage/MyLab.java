@@ -15,6 +15,18 @@ public class MyLab {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
     private static Reader reader = null;
 
+    public static void init() {
+        printer.printHelp();
+    }
+
+    public static void msg(String msg) {
+        System.out.println(msg);
+    }
+
+    public static boolean isNumber(String s) {
+        return s.matches("[0-9]+");
+    }
+
     public static void run() {
         for (; ; ) {
             System.out.println(ConsoleColors.PURPLE + "---请选择登录身份---\n---admin(以管理员身份登录)---\n---reader(以读者身份进入)---\n---exit(退出)---" + ConsoleColors.RESET);
@@ -81,22 +93,6 @@ public class MyLab {
         }
     }
 
-    public static void init() {
-        printer.printHelp();
-    }
-
-    public static void msg(String msg) {
-        System.out.println(msg);
-    }
-
-    public static boolean isInCMDList(int i) {
-        return i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 9;
-    }
-
-    public static boolean isNumber(String s) {
-        return s.matches("[0-9]+");
-    }
-
     public static void exit() {
         System.out.println(ConsoleColors.YELLOW + "-退出系统-");
         System.out.println("GodLin's Manager 重置中...");
@@ -105,7 +101,7 @@ public class MyLab {
     }
 
     public static void ManagerCommandSelector(int number) {
-        if (!isInCMDList(number))
+        if (!isNumber(String.valueOf(number)))
             number = 0;
         switch (number) {
             case 0:
@@ -121,6 +117,15 @@ public class MyLab {
                 break;
             case 3:
                 mediator.addReader(scanner);
+                printer.printReaderTable();
+                break;
+            case 4:
+                mediator.removeReaderById(scanner);
+                printer.printReaderTable();
+                break;
+            case 8:
+                printer.printReaderTable();
+                break;
             case 9:
                 printer.printTable();
                 break;
@@ -131,7 +136,7 @@ public class MyLab {
     }
 
     public static void ReaderCommandSelector(int number) {
-        if (!isInCMDList(number))
+        if (!isNumber(String.valueOf(number)))
             number = 0;
         switch (number) {
             case 0:
@@ -177,7 +182,7 @@ public class MyLab {
     }
 
     public static void realReaderSelector(int number) {
-        if (!isInCMDList(number))
+        if (!isNumber(String.valueOf(number)))
             number = 0;
         switch (number) {
             case 0:
@@ -186,6 +191,7 @@ public class MyLab {
             case 1:
                 //TODO: borrow
                 System.out.println("borrow dvd");
+                mediator.borrowById(scanner);
                 break;
             case 2:
                 //TODO: revert

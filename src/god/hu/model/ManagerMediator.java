@@ -35,6 +35,11 @@ public class ManagerMediator implements DVDMediatorOperate {
         return manager.getDVDById(id);
     }
 
+    @Override
+    public void removeReaderById(Integer id) throws Exception {
+        manager.removeReaderById(id);
+    }
+
     public void removeDVDById(Scanner sc) {
         System.out.println("请输入要删除的DVD id(如,1,2..)");
         boolean numeric = true;
@@ -76,12 +81,42 @@ public class ManagerMediator implements DVDMediatorOperate {
 
     public void addReader(Scanner sc) {
         Reader reader = new Reader();
+        String name = "";
         reader.setId(generator.getNumber());
         System.out.println("请输入Reader名字:");
+        for (; ; ) {
+            name = sc.next();
+            printArrow();
+            if (!name.equals("null"))
+                break;
+        }
+        reader.setName(name);
         reader.setDvd_list_id(generator.getNumber());
         printArrow();
-        System.out.println(reader.toString());
         manager.addReader(reader);
+    }
+
+    public void removeReaderById(Scanner sc) {
+        System.out.println("请输入要删除的Reader ID:");
+        boolean numeric = true;
+        int id;
+        printArrow();
+        for (; ; ) {
+            String s = sc.next();
+            numeric = s.matches("-?\\d+(\\.\\d+)?");
+            if (numeric) {
+                id = Integer.parseInt(s);
+                break;
+            } else {
+                System.out.println(ConsoleColors.RED + "id无效,请重新输入或联系管理员!" + ConsoleColors.RESET);
+                printArrow();
+            }
+        }
+        try {
+            removeReaderById(id);
+        } catch (Exception e) {
+            System.out.println(ConsoleColors.YELLOW + "失败!指定的id不存在或不正确,请检查!" + ConsoleColors.RESET);
+        }
     }
 
     public Reader getReader(Scanner sc) {
@@ -103,6 +138,14 @@ public class ManagerMediator implements DVDMediatorOperate {
             return reader;
         }
         return reader;
+    }
+
+    public DVD borrowById(Scanner sc) {
+        DVD dvd = null;
+        int id=0;
+        manager.borrow(id);
+
+        return dvd;
     }
 
     public void printArrow() {

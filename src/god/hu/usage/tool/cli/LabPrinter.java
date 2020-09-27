@@ -59,7 +59,7 @@ public class LabPrinter implements TablePrint {
 
     public void printHelp() {
         System.out.println(ConsoleColors.PURPLE + "---GodLin's Manager---" + ConsoleColors.RESET);
-        System.out.println(ConsoleColors.BLUE + "Help:\nSelect Number to input.\n0: Print Help Message.\n1: Add DVD to lab\n2: Delete DVD from lab\n3: Not Implemented yet!\n9: Print Lab table\nlogout: 退出登录\nexit: Exit System,退出系统\n 选择`一个`数字来执行指令：" + ConsoleColors.RESET);
+        System.out.println(ConsoleColors.BLUE + "Help:\nSelect Number to input.\n0: Print Help Message.\n1: Add DVD to lab\n2: Delete DVD from lab\n3: Add new reader\n4: Remove Reader By ID\n8: Print all reader\n9: Print Lab table\nlogout: 退出登录\nexit: Exit System,退出系统\n 选择`一个`数字来执行指令：" + ConsoleColors.RESET);
         printArrow();
     }
 

@@ -3,6 +3,7 @@ package jdbc;
 import god.hu.db.MDBOperator;
 import god.hu.model.DVD;
 import god.hu.model.Reader;
+import god.hu.model.Time;
 import god.hu.usage.abs.State;
 import god.hu.usage.tool.SerialNumberGenerator;
 import god.hu.usage.tool.cli.LabPrinter;
@@ -50,7 +51,7 @@ public class TestJDBC {
         render.setHeaders("ID", "TIME", "STATE", "NAME");
 
         try {
-            operator.getReaders().stream().map(Reader::toString).forEach(System.out::print);
+            operator.updateTimeBySerial("JKKJDF",new Time.Builder().setBorrowTime("NICEPIE").setRevertTime("JKDJFDS").build());
         } catch (Exception e) {
             e.printStackTrace();
         }

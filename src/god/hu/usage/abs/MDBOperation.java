@@ -10,7 +10,7 @@ public interface MDBOperation extends ReaderOperate,DVDOperate{
     Integer selectCountByName(String name) throws Exception;
     ArrayList<DVD> selectAll() throws Exception;
     ArrayList<String> selectDistinctName() throws Exception;
-
+    void updateTimeBySerial(String serial,Time time) throws Exception;
     @Override
     default void addReader(Reader reader) {
 

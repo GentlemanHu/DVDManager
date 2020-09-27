@@ -89,6 +89,11 @@ public class DVDManager implements DVDOperate {
     }
 
     @Override
+    public void removeReaderById(Integer id) throws Exception {
+        operator.removeReaderById(id);
+    }
+
+    @Override
     public void renew(int id, Time time) {
         dvds.get(id).setTime(time);
     }

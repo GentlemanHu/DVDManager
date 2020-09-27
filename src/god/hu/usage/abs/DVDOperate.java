@@ -21,5 +21,7 @@ public interface DVDOperate {
 
     DVD getDVDById(Integer id) throws Exception;
 
+    void removeReaderById(Integer id) throws  Exception;
+
     void renew(int id,Time time);
 }

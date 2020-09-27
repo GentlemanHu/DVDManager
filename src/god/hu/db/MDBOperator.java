@@ -7,13 +7,12 @@ import god.hu.usage.abs.DVDOperate;
 import god.hu.usage.abs.State;
 
 import java.sql.*;
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 public class MDBOperator implements DVDOperate, MDBOperation {
     private static Connection con = null;
-    private DVDManager manager;
-    private Statement statement = null;
-
+    private static java.util.Date date;
 
     static {
         //step1 load the driver class
@@ -27,6 +26,9 @@ public class MDBOperator implements DVDOperate, MDBOperation {
         }
     }
 
+    private DVDManager manager;
+    private Statement statement = null;
+
     public MDBOperator() {
         manager = Lab.getManager();
     }
@@ -37,8 +39,41 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     }
 
     @Override
+    public void updateTimeBySerial(String serial, Time time) throws Exception {
+        try {
+            //TODO: fix update failed;
+            statement = con.createStatement();
+            String sql = "update time set borrow_time='" + time.getBorrowTime() + "',revert_time='" + time.getRevertTime() + "',renew_time='" + time.getRenewTime() + "' where serial='" + serial + "'";
+            int code = statement.executeUpdate(sql);
+            System.out.println(sql + "<-----sql");
+            if (code == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
+    }
+
+    @Override
     public DVD borrow(int id) {
-        return null;
+        //TODO: fix update failed,find new way borrow;
+        DVD dvd = null;
+        Time time = null;
+        try {
+            dvd = getDVDById(id);
+            statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from time where serial='" + dvd.getTime().getSerial() + "'");
+            if (resultSet.next()) {
+                date = new java.util.Date();
+                time = new Time.Builder().setId(resultSet.getInt(1)).setBorrowTime(dateShort()).build();
+            }
+            dvd.setTime(time);
+        } catch (SQLException throwables) {
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        } catch (Exception e) {
+            System.out.println("借阅失败,请重试或联系管理员!");
+        }
+        return dvd;
     }
 
     @Override
@@ -57,7 +92,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             statement = con.createStatement();
             statement.executeQuery("insert into reader values('" + reader.getName() + "'," + reader.getId() + ",'" + reader.getDvd_list_id() + "')");
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
         }
     }
 
@@ -67,8 +102,8 @@ public class MDBOperator implements DVDOperate, MDBOperation {
         ResultSet set = null;
         try {
             statement = con.createStatement();
-            set = statement.executeQuery("select * from reader where id="+id);
-            if(set.next()){
+            set = statement.executeQuery("select * from reader where id=" + id);
+            if (set.next()) {
                 reader = new Reader();
                 reader.setName(set.getString(1));
                 reader.setId(set.getInt(2));
@@ -121,6 +156,18 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             throwables.printStackTrace();
         }
         return dvd;
+    }
+
+    @Override
+    public void removeReaderById(Integer id) throws Exception {
+        try {
+            statement = con.createStatement();
+            int deleted = statement.executeUpdate("delete from reader where id=" + id);
+            if (deleted == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     @Override
@@ -185,13 +232,14 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     }
 
     public ArrayList<Reader> getReaders() throws SQLException {
-        ArrayList<Reader> readers  =new ArrayList<Reader>();;
+        ArrayList<Reader> readers = new ArrayList<Reader>();
+        ;
         ResultSet rt2 = null;
         try {
             statement = con.createStatement();
             rt2 = statement.executeQuery("select * from reader");
             while (rt2.next()) {
-                readers.add(new Reader(rt2.getString(1),rt2.getInt(2),rt2.getInt(3)));
+                readers.add(new Reader(rt2.getString(1), rt2.getInt(2), rt2.getInt(3)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,5 +248,9 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             rt2.close();
         }
         return readers;
+    }
+
+    private String dateShort() {
+        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
 }

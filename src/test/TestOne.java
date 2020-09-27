@@ -1,14 +1,22 @@
-package test;
 
 import god.hu.usage.tool.SerialNumberGenerator;
 import god.hu.usage.tool.cli.TableRender;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TestOne {
     private static TableRender render = new TableRender();
 
+
+    @Test
+    public void testDate(){
+        Date date = new Date();
+
+        System.out.println(DateFormat.getDateInstance(DateFormat.SHORT).format(date));
+    }
     @Test
     public void testSerial(){
         for (int i = 0; i < 10; i++) {
