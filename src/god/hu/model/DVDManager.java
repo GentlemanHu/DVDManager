@@ -4,6 +4,7 @@ import god.hu.db.MDBOperator;
 import god.hu.usage.abs.DVDOperate;
 import god.hu.usage.abs.State;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DVDManager implements DVDOperate {
@@ -15,8 +16,8 @@ public class DVDManager implements DVDOperate {
         this.dvds = dvds;
     }
 
-    public ArrayList<Reader> getReaders() {
-        return readers;
+    public ArrayList<Reader> getReaders() throws SQLException {
+        return operator.getReaders();
     }
 
     public void setReaders(ArrayList<Reader> readers) {
@@ -47,24 +48,22 @@ public class DVDManager implements DVDOperate {
 
     @Override
     public void addReader(Reader reader) {
-        readers.add(reader);
+        operator.addReader(reader);
     }
 
     @Override
     public Reader getReader(int id) {
-        return readers.get(id);
+        return operator.getReader(id);
     }
 
     @Override
     public DVD borrow(int id) {
-        dvds.get(id).setState(State.NOT_AVAI);
-        return dvds.get(id);
+        return operator.borrow(id);
     }
 
     @Override
     public DVD revert(int id) {
-        dvds.get(id).setState(State.ON_SHELF);
-        return dvds.get(id);
+        return operator.revert(id);
     }
 
     @Override
@@ -80,11 +79,13 @@ public class DVDManager implements DVDOperate {
     }
 
     @Override
-    public void removeDVDById(Integer id) {
-//        if (id > dvds.get(dvds.size()-1).getId())
-//            throw new IndexOutOfBoundsException();
-//        dvds.remove(id-1);
+    public void removeDVDById(Integer id) throws Exception{
         operator.removeDVDById(id);
+    }
+
+    @Override
+    public DVD getDVDById(Integer id) throws Exception {
+        return operator.getDVDById(id);
     }
 
     @Override

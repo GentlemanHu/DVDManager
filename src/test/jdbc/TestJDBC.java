@@ -1,6 +1,8 @@
-package test.jdbc;
+package jdbc;
 
 import god.hu.db.MDBOperator;
+import god.hu.model.DVD;
+import god.hu.model.Reader;
 import god.hu.usage.abs.State;
 import god.hu.usage.tool.SerialNumberGenerator;
 import god.hu.usage.tool.cli.LabPrinter;
@@ -46,36 +48,29 @@ public class TestJDBC {
         MDBOperator operator = new MDBOperator();
         render.setShowVerticalLines(true);
         render.setHeaders("ID", "TIME", "STATE", "NAME");
-//        operator.addDVD(new DVD.Builder()
-//                .setID(111)
-//                .setTime(new Time.Builder().setSerial(new SerialNumberGenerator(7).generate()).build())
-//                .setState(State.ON_SHELF)
-//                .setName("nicepie")
-//                .build()
-//        );
+
         try {
-            operator.selectAll().forEach(x -> System.out.println(x.toString()));
-            new LabPrinter().printTable();
+            operator.getReaders().stream().map(Reader::toString).forEach(System.out::print);
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-//step1 load the driver class
+            //step1 load the driver class
             Class.forName("oracle.jdbc.driver.OracleDriver");
-//step2 create  the connection object
+            //step2 create  the connection object
             Connection con = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521:god", "scott", "tiger");
-//step3 create the statement object
+            //step3 create the statement object
             Statement stmt = con.createStatement();
             PreparedStatement preparedStatement = con.prepareStatement("select distinct name from dvd ");
-//step4 execute query
+            //step4 execute query
             // ResultSet rs = stmt.executeQuery("select * from app_test");
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 render.addRow(rs.getString(1), rs.getString(2), String.valueOf(rs.getString(3) == "0" ? State.ON_SHELF : State.NOT_AVAI), rs.getString(4));
             }
             render.print();
-//step5 close the connection object
+            //step5 close the connection object
             con.close();
 
         } catch (Exception e) {

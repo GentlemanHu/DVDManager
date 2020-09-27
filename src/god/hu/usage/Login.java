@@ -15,8 +15,7 @@ public class Login {
             case "reader":
                 return Identity.READER;
             case "exit":
-                System.out.println("退出系统");
-                System.exit(0);
+                MyLab.exit();
             default:
                 return Identity.UNDEFINED;
         }

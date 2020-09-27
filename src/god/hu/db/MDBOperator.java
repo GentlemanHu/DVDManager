@@ -2,15 +2,18 @@ package god.hu.db;
 
 import god.hu.model.*;
 import god.hu.model.Time;
-import god.hu.usage.abs.DBOperation;
+import god.hu.usage.abs.MDBOperation;
 import god.hu.usage.abs.DVDOperate;
 import god.hu.usage.abs.State;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class MDBOperator implements DVDOperate, DBOperation {
+public class MDBOperator implements DVDOperate, MDBOperation {
     private static Connection con = null;
+    private DVDManager manager;
+    private Statement statement = null;
+
 
     static {
         //step1 load the driver class
@@ -24,21 +27,13 @@ public class MDBOperator implements DVDOperate, DBOperation {
         }
     }
 
-    private DVDManager manager;
-    private Statement statement = null;
-
     public MDBOperator() {
         manager = Lab.getManager();
     }
 
     @Override
-    public void addReader(Reader reader) {
+    public void removeDVD(DVD dvd) {
 
-    }
-
-    @Override
-    public Reader getReader(int id) {
-        return null;
     }
 
     @Override
@@ -52,9 +47,42 @@ public class MDBOperator implements DVDOperate, DBOperation {
     }
 
     @Override
+    public void renew(int id, Time time) {
+
+    }
+
+    @Override
+    public void addReader(Reader reader) {
+        try {
+            statement = con.createStatement();
+            statement.executeQuery("insert into reader values('" + reader.getName() + "'," + reader.getId() + ",'" + reader.getDvd_list_id() + "')");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Override
+    public Reader getReader(int id) {
+        Reader reader = null;
+        ResultSet set = null;
+        try {
+            statement = con.createStatement();
+            set = statement.executeQuery("select * from reader where id="+id);
+            if(set.next()){
+                reader = new Reader();
+                reader.setName(set.getString(1));
+                reader.setId(set.getInt(2));
+                reader.setDvd_list_id(set.getInt(3));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return reader;
+    }
+
+    @Override
     public void addDVD(DVD dvd) {
         try {
-            // render.setHeaders("ID", "TIME", "STATE", "NAME");
             statement = con.createStatement();
             statement.executeQuery("insert into dvd values(" + dvd.getId() + ",'" + dvd.getTime().getSerial() + "'," + (dvd.getState() == State.NOT_AVAI ? 1 : 0) + ",'" + dvd.getName() + "')");
         } catch (SQLException throwables) {
@@ -63,23 +91,36 @@ public class MDBOperator implements DVDOperate, DBOperation {
     }
 
     @Override
-    public void removeDVD(DVD dvd) {
-
-    }
-
-    @Override
-    public void removeDVDById(Integer id) {
+    public void removeDVDById(Integer id) throws Exception {
         try {
             statement = con.createStatement();
-            statement.executeQuery("delete from dvd where id=" + id);
-        } catch (Exception e) {
-            e.printStackTrace();
+            int deleted = statement.executeUpdate("delete from dvd where id=" + id);
+            if (deleted == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     @Override
-    public void renew(int id, Time time) {
-
+    public DVD getDVDById(Integer id) throws Exception {
+        ResultSet result = null;
+        DVD dvd = null;
+        try {
+            statement = con.createStatement();
+            result = statement.executeQuery("select * from dvd where id=" + id);
+            if (result.next()) {
+                dvd = new DVD.Builder()
+                        .setID(result.getInt(1))
+                        .setTime(new Time.Builder().setSerial(result.getString(2)).build())
+                        .setState(result.getInt(3) == 0 ? State.ON_SHELF : State.NOT_AVAI)
+                        .setName(result.getString(4))
+                        .build();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return dvd;
     }
 
     @Override
@@ -141,5 +182,23 @@ public class MDBOperator implements DVDOperate, DBOperation {
             rt2.close();
         }
         return result;
+    }
+
+    public ArrayList<Reader> getReaders() throws SQLException {
+        ArrayList<Reader> readers  =new ArrayList<Reader>();;
+        ResultSet rt2 = null;
+        try {
+            statement = con.createStatement();
+            rt2 = statement.executeQuery("select * from reader");
+            while (rt2.next()) {
+                readers.add(new Reader(rt2.getString(1),rt2.getInt(2),rt2.getInt(3)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            assert rt2 != null;
+            rt2.close();
+        }
+        return readers;
     }
 }

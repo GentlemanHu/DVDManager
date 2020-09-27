@@ -3,10 +3,8 @@ package god.hu.usage;
 import god.hu.model.*;
 import god.hu.usage.tool.cli.ConsoleColors;
 import god.hu.usage.tool.cli.LabPrinter;
-import god.hu.usage.abs.State;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class MyLab {
@@ -15,7 +13,7 @@ public class MyLab {
     private static final Scanner scanner = new Scanner(System.in);
     private static final ManagerMediator mediator = new ManagerMediator(manager);
     private static final SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
-
+    private static Reader reader = null;
 
     public static void run() {
         for (; ; ) {
@@ -57,42 +55,33 @@ public class MyLab {
                 printer.printArrow();
                 continue;
             }
-            commandSelector(number);
+            ManagerCommandSelector(number);
         }
     }
 
-    public static void asReader(){
-        printer.printHelp2();
+    public static void asReader() {
+        printer.printReaderLogin();
+        for (; ; ) {
+            String tmp = "";
+            int number = 0;
+            tmp = scanner.next();
+            if (isNumber(tmp) && tmp.length() == 1)
+                number = Integer.parseInt(tmp);
+            else if (tmp.equals("exit"))
+                exit();
+            else if (tmp.equals("logout")) {
+                System.out.println(ConsoleColors.PURPLE + "已成功登出" + ConsoleColors.RESET);
+                break;
+            } else {
+                System.out.println("-输入无效-\n输入\"0\"查看帮助");
+                printer.printArrow();
+                continue;
+            }
+            ReaderCommandSelector(number);
+        }
     }
 
     public static void init() {
-//        manager.addDVD(
-//                new DVD.Builder()
-//                        .setID(1)
-//                        .setState(State.ON_SHELF)
-//                        .setName("Sound of Nature")
-//                        .setTime(new Time.Builder()
-//                                .setBorrowTime(formatter.format(new Date()))
-//                                .build())
-//                        .build());
-//        manager.addDVD(
-//                new DVD.Builder()
-//                        .setID(2)
-//                        .setState(State.NOT_AVAI)
-//                        .setName("TokyoHot")
-//                        .setTime(new Time.Builder()
-//                                .setBorrowTime(formatter.format(new Date()))
-//                                .build())
-//                        .build());
-//        manager.addDVD(
-//                new DVD.Builder()
-//                        .setID(3)
-//                        .setState(State.ON_SHELF)
-//                        .setName("Java101")
-//                        .setTime(new Time.Builder()
-//                                .setBorrowTime(formatter.format(new Date()))
-//                                .build())
-//                        .build());
         printer.printHelp();
     }
 
@@ -101,7 +90,7 @@ public class MyLab {
     }
 
     public static boolean isInCMDList(int i) {
-        return i == 0 || i == 1 || i == 2 || i == 3 || i == 9;
+        return i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 9;
     }
 
     public static boolean isNumber(String s) {
@@ -115,7 +104,7 @@ public class MyLab {
         System.exit(0);
     }
 
-    public static void commandSelector(int number) {
+    public static void ManagerCommandSelector(int number) {
         if (!isInCMDList(number))
             number = 0;
         switch (number) {
@@ -130,11 +119,87 @@ public class MyLab {
                 mediator.removeDVDById(scanner);
                 printer.printTable();
                 break;
+            case 3:
+                mediator.addReader(scanner);
             case 9:
                 printer.printTable();
                 break;
             default:
                 printer.printHelp();
+                break;
+        }
+    }
+
+    public static void ReaderCommandSelector(int number) {
+        if (!isInCMDList(number))
+            number = 0;
+        switch (number) {
+            case 0:
+                printer.printReaderLogin();
+                break;
+            case 1:
+                printer.printReaderTable();
+                break;
+            case 2:
+                reader = mediator.getReader(scanner);
+                if (reader == null)
+                    System.out.println("登录失败,请重试或联系管理员!");
+                else {
+                    readerLab();
+                }
+                break;
+            default:
+                printer.printReaderLogin();
+                break;
+        }
+    }
+
+    public static void readerLab() {
+        printer.printReaderHelp(reader);
+        for (; ; ) {
+            String tmp = "";
+            int number = 0;
+            tmp = scanner.next();
+            if (isNumber(tmp) && tmp.length() == 1)
+                number = Integer.parseInt(tmp);
+            else if (tmp.equals("exit"))
+                exit();
+            else if (tmp.equals("logout")) {
+                System.out.println(ConsoleColors.PURPLE + "已成功登出" + ConsoleColors.RESET);
+                break;
+            } else {
+                System.out.println("-输入无效-\n输入\"0\"查看帮助");
+                printer.printArrow();
+                continue;
+            }
+            realReaderSelector(number);
+        }
+    }
+
+    public static void realReaderSelector(int number) {
+        if (!isInCMDList(number))
+            number = 0;
+        switch (number) {
+            case 0:
+                printer.printReaderHelp(reader);
+                break;
+            case 1:
+                //TODO: borrow
+                System.out.println("borrow dvd");
+                break;
+            case 2:
+                //TODO: revert
+                System.out.println("revert dvd");
+                break;
+            case 3:
+                System.out.println("renew dvd");
+                //TODO: renew
+            case 9:
+                System.out.println("print all list of dvd");
+                //TODO: print own list
+                break;
+            default:
+                printer.printReaderHelp(reader);
                 break;
         }
     }

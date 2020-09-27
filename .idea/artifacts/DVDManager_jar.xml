@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/DVDManager_jar</output-path>
     <root id="archive" name="DVDManager.jar">
       <element id="module-output" name="DVDManager" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/ojdbc14.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

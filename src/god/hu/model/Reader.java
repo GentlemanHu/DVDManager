@@ -7,14 +7,38 @@ import java.util.ArrayList;
 public class Reader implements ReaderOperate {
     private String name;
     private Integer id;
+
+    private Integer dvd_list_id;
     private ArrayList<DVD> own;
     private DVDManager manager;
+    public Reader(String name, Integer id, Integer dvd_list_id) {
+        this.name = name;
+        this.id = id;
+        this.dvd_list_id = dvd_list_id;
+    }
 
     public Reader() {
     }
 
     public Reader(DVDManager manager) {
         this.manager = manager;
+    }
+
+    @Override
+    public String toString() {
+        return "Reader{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                ", dvd_list_id=" + dvd_list_id +
+                '}';
+    }
+
+    public Integer getDvd_list_id() {
+        return dvd_list_id;
+    }
+
+    public void setDvd_list_id(Integer dvd_list_id) {
+        this.dvd_list_id = dvd_list_id;
     }
 
     public String getName() {
