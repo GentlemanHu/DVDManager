@@ -17,6 +17,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" scope="RUNTIME" name="ojdbc14" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.34_1" level="project" />
   </component>
 </module>

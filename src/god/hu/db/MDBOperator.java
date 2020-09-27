@@ -17,10 +17,10 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     static {
         //step1 load the driver class
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("com.mysql.jdbc.Driver");
             //step2 create  the connection object
             con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521:god", "scott", "tiger");
+                    "jdbc:mysql://127.0.0.1:3306/dvd_manager", "root", "");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -51,7 +51,7 @@ public class TestJDBC {
         render.setHeaders("ID", "TIME", "STATE", "NAME");
 
         try {
-            operator.updateTimeBySerial("JKKJDF",new Time.Builder().setBorrowTime("NICEPIE").setRevertTime("JKDJFDS").build());
+            operator.updateTimeBySerial("JKKJDF", new Time.Builder().setBorrowTime("NICEPIE").setRevertTime("JKDJFDS").build());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,6 +79,18 @@ public class TestJDBC {
         }
     }
 
+    @Test
+    public void testMysql() {
+        TableRender render = new TableRender();
+        MDBOperator operator = new MDBOperator();
+        render.setShowVerticalLines(true);
+        render.setHeaders("ID", "TIME", "STATE", "NAME");
+        try {
+            render.print();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void testTemp() {
