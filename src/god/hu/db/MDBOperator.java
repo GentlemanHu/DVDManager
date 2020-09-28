@@ -1,5 +1,6 @@
 package god.hu.db;
 
+import god.hu.Main;
 import god.hu.model.*;
 import god.hu.model.Time;
 import god.hu.usage.abs.MDBOperation;
@@ -12,20 +13,25 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 
 public class MDBOperator implements DVDOperate, MDBOperation {
-    public static String ip = "192.168.113.84";
+    public static String ip = "";
     private static Connection con = null;
     private static java.util.Date date;
 
     static {
         //step1 load the driver class
         try {
+            ip = Main.ip;
+            if (ip.equals(""))
+                ip = "192.168.113.84";
             Class.forName("oracle.jdbc.driver.OracleDriver");
             //step2 create  the connection object
-            con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@" + ip + ":1521:god", "scott", "tiger");
-
+            String url = "jdbc:oracle:thin:@" + ip + ":1521:god";
+            con = DriverManager.getConnection(url
+                    , "scott", "tiger");
+            System.out.println();
             System.out.println("DB<-连接成功->DB IP为:" + ip);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(ConsoleColors.RED + "数据库连接失败,请重试!\n仔细检查ip是否正确!\n退出系统中..." + ConsoleColors.RESET);
             System.exit(0);
         }
