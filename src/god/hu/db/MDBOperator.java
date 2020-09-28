@@ -12,7 +12,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 
 public class MDBOperator implements DVDOperate, MDBOperation {
-    public static String ip = "192.168.113.84";
+    public static String ip = "192.168.113.104";
     private static Connection con = null;
     private static java.util.Date date;
 
@@ -22,14 +22,11 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             Class.forName("com.mysql.jdbc.Driver");
             //step2 create  the connection object
             con = DriverManager.getConnection(
-<<<<<<< HEAD
-                    "jdbc:mysql://127.0.0.1:3306/dvd_manager", "root", "");
-=======
-                    "jdbc:oracle:thin:@" + ip + ":1521:god", "scott", "tiger");
+                    "jdbc:mysql://"+ip+":3306/dvd_manager", "dvd_manager", "hyl3356");
 
             System.out.println("DB<-连接成功->DB IP为:" + ip);
->>>>>>> master
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(ConsoleColors.RED + "数据库连接失败,请重试!\n仔细检查ip是否正确!\n退出系统中..." + ConsoleColors.RESET);
             System.exit(0);
         }
@@ -91,7 +88,8 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             String sql = "select * from reader_list where reader_id='" + reader_id + "'";
             ResultSet set = statement.executeQuery(sql);
             if (set.next()) {
-                System.out.println(set.getInt(2) + "," + set.getInt(3) + "," + set.getInt(4));
+                //System.out.println(set.getInt(2) + "," + set.getInt(3) + "," + set.getInt(4));
+                // detect which is empty(cause default its 0),
                 if (set.getInt(2) == 0)
                     return 1;
                 if (set.getInt(3) == 0)
@@ -110,7 +108,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     public void insertNewReaderListByIdFromReader(Integer id) throws Exception {
         try {
             statement = con.createStatement();
-            String sql = "insert into reader_list values(" + id + ",'','','')";
+            String sql = "insert into reader_list values(" + id + ",0,0,0)";
             int code = statement.executeUpdate(sql);
             if (code == 0)
                 throw new Exception();
@@ -187,7 +185,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     public void addReader(Reader reader) {
         try {
             statement = con.createStatement();
-            statement.executeQuery("insert into reader values('" + reader.getName() + "'," + reader.getId() + ",'" + reader.getDvd_list_id() + "')");
+            statement.executeUpdate("insert into reader values('" + reader.getName() + "'," + reader.getId() + ",'" + reader.getDvd_list_id() + "')");
             insertNewReaderListByIdFromReader(reader.getId());
         } catch (SQLException throwables) {
             System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
@@ -224,7 +222,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     public void insertNewTimeWhenAddDVD(Integer id, String serial) throws Exception {
         try {
             statement = con.createStatement();
-            statement.executeQuery("insert into time values('" + id + "','','','','" + serial + "')");
+            statement.executeUpdate("insert into time values('" + id + "','','','','" + serial + "')");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -263,7 +261,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     public void addDVD(DVD dvd) {
         try {
             statement = con.createStatement();
-            statement.executeQuery("insert into dvd values(" + dvd.getId() + ",'" + dvd.getTime().getSerial() + "'," + (dvd.getState() == State.NOT_AVAI ? 1 : 0) + ",'" + dvd.getName() + "')");
+            statement.executeUpdate("insert into dvd values(" + dvd.getId() + ",'" + dvd.getTime().getSerial() + "'," + (dvd.getState() == State.NOT_AVAI ? 1 : 0) + ",'" + dvd.getName() + "')");
             insertNewTimeWhenAddDVD(dvd.getTime().getId(), dvd.getTime().getSerial());
         } catch (SQLException throwables) {
             throwables.printStackTrace();

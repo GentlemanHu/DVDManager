@@ -114,7 +114,7 @@ public class ManagerMediator implements DVDMediatorOperate {
                 break;
             } else {
                 System.out.println(ConsoleColors.RED + "id无效,请重新输入或联系管理员!" + ConsoleColors.RESET);
-                printArrow();
+                return;
             }
         }
         try {

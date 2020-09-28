@@ -55,35 +55,9 @@ public class TestJDBC {
         render.setHeaders("ID", "TIME", "STATE", "NAME");
 
         try {
-<<<<<<< HEAD
-            operator.updateTimeBySerial("JKKJDF", new Time.Builder().setBorrowTime("NICEPIE").setRevertTime("JKDJFDS").build());
-=======
-            operator.findEmptyListInReaderListByReaderId(123456);
->>>>>>> master
+            System.out.println(operator.getDVDById(123456).toString());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        try {
-            //step1 load the driver class
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            //step2 create  the connection object
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521:god", "scott", "tiger");
-            //step3 create the statement object
-            Statement stmt = con.createStatement();
-            PreparedStatement preparedStatement = con.prepareStatement("select distinct name from dvd ");
-            //step4 execute query
-            // ResultSet rs = stmt.executeQuery("select * from app_test");
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                render.addRow(rs.getString(1), rs.getString(2), String.valueOf(rs.getString(3) == "0" ? State.ON_SHELF : State.NOT_AVAI), rs.getString(4));
-            }
-            render.print();
-            //step5 close the connection object
-            con.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
