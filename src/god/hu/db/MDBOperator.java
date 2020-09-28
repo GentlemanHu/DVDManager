@@ -1,5 +1,6 @@
 package god.hu.db;
 
+import god.hu.Main;
 import god.hu.model.*;
 import god.hu.model.Time;
 import god.hu.usage.abs.MDBOperation;
@@ -12,28 +13,30 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 
 public class MDBOperator implements DVDOperate, MDBOperation {
-    public static String ip = "192.168.113.104";
+    public static volatile String ip = "";
     private static Connection con = null;
     private static java.util.Date date;
+    private DVDManager manager;
+    private Statement statement = null;
 
     static {
         //step1 load the driver class
         try {
+            if (Main.ip.equals(""))
+                ip = "192.168.113.104";
+            else ip = Main.ip;
             Class.forName("com.mysql.jdbc.Driver");
             //step2 create  the connection object
             con = DriverManager.getConnection(
-                    "jdbc:mysql://"+ip+":3306/dvd_manager", "dvd_manager", "hyl3356");
+                    "jdbc:mysql://" + ip + ":3306/dvd_manager", "dvd_manager", "hyl3356");
 
-            System.out.println("DB<-连接成功->DB IP为:" + ip);
+            System.out.println(ConsoleColors.YELLOW+"DB<-连接成功->DB IP为:" + ip+ConsoleColors.RESET);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(ConsoleColors.RED + "数据库连接失败,请重试!\n仔细检查ip是否正确!\n退出系统中..." + ConsoleColors.RESET);
             System.exit(0);
         }
     }
-
-    private DVDManager manager;
-    private Statement statement = null;
 
     public MDBOperator() {
         manager = Lab.getManager();

@@ -4,7 +4,6 @@ import god.hu.usage.abs.DVDOperate;
 
 public class Lab {
     private static final Lab lab = new Lab();
-    private static final DVDOperate dealer = new DVDManager();
     private static final DVDManager manager = new DVDManager();
 
     private Lab() {
@@ -19,10 +18,5 @@ public class Lab {
     public static DVDManager getManager() {
         return manager;
     }
-
-    public static DVDOperate getDealer() {
-        return dealer;
-    }
-
 
 }

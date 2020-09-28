@@ -112,6 +112,7 @@ public class MyLab {
                 printer.printTable();
                 break;
             case 2:
+                printer.printTable();
                 mediator.removeDVDById(scanner);
                 printer.printTable();
                 break;
@@ -120,6 +121,7 @@ public class MyLab {
                 printer.printReaderTable();
                 break;
             case 4:
+                printer.printReaderTable();
                 mediator.removeReaderById(scanner);
                 printer.printReaderTable();
                 break;

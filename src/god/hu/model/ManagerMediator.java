@@ -79,7 +79,6 @@ public class ManagerMediator implements DVDMediatorOperate {
         dvd.setState(sc.nextInt() == 0 ? State.ON_SHELF : State.NOT_AVAI);
         printArrow();
         dvd.setTime(new Time.Builder().setSerial(generator.generate()).setId(generator.getNumber()).build());
-        System.out.println(dvd.toString());
         manager.addDVD(dvd);
     }
 
@@ -97,7 +96,6 @@ public class ManagerMediator implements DVDMediatorOperate {
         }
         reader.setName(name);
         reader.setDvd_list_id(generator.getNumber());
-        printArrow();
         manager.addReader(reader);
     }
 
