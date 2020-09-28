@@ -17,11 +17,13 @@ public interface DVDOperate {
 
     void removeDVD(DVD dvd);
 
+    DVD borrow(int id, Reader reader) throws Exception;
+
     void removeDVDById(Integer id) throws Exception;
 
     DVD getDVDById(Integer id) throws Exception;
 
-    void removeReaderById(Integer id) throws  Exception;
+    void removeReaderById(Integer id) throws Exception;
 
-    void renew(int id,Time time);
+    void renew(int id, Time time);
 }

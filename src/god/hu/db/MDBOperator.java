@@ -5,12 +5,14 @@ import god.hu.model.Time;
 import god.hu.usage.abs.MDBOperation;
 import god.hu.usage.abs.DVDOperate;
 import god.hu.usage.abs.State;
+import god.hu.usage.tool.cli.ConsoleColors;
 
 import java.sql.*;
 import java.text.DateFormat;
 import java.util.ArrayList;
 
 public class MDBOperator implements DVDOperate, MDBOperation {
+    public static String ip = "192.168.113.84";
     private static Connection con = null;
     private static java.util.Date date;
 
@@ -20,9 +22,16 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             Class.forName("com.mysql.jdbc.Driver");
             //step2 create  the connection object
             con = DriverManager.getConnection(
+<<<<<<< HEAD
                     "jdbc:mysql://127.0.0.1:3306/dvd_manager", "root", "");
+=======
+                    "jdbc:oracle:thin:@" + ip + ":1521:god", "scott", "tiger");
+
+            System.out.println("DB<-连接成功->DB IP为:" + ip);
+>>>>>>> master
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(ConsoleColors.RED + "数据库连接失败,请重试!\n仔细检查ip是否正确!\n退出系统中..." + ConsoleColors.RESET);
+            System.exit(0);
         }
     }
 
@@ -45,7 +54,6 @@ public class MDBOperator implements DVDOperate, MDBOperation {
             statement = con.createStatement();
             String sql = "update time set borrow_time='" + time.getBorrowTime() + "',revert_time='" + time.getRevertTime() + "',renew_time='" + time.getRenewTime() + "' where serial='" + serial + "'";
             int code = statement.executeUpdate(sql);
-            System.out.println(sql + "<-----sql");
             if (code == 0)
                 throw new Exception();
         } catch (SQLException throwables) {
@@ -55,25 +63,114 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     }
 
     @Override
-    public DVD borrow(int id) {
+    public void updateReaderListByReaderId(Integer reader_id, DVD dvd) throws Exception {
+        try {
+            int dvd_n = findEmptyListInReaderListByReaderId(reader_id);
+            if (dvd_n == -1) {
+                System.out.println("已经达到借阅上限!");
+                throw new Exception();
+            }
+
+            String dvd_num = "dvd" + dvd_n + "_id";
+            statement = con.createStatement();
+            String sql = "update reader_list set " + dvd_num + "=" + dvd.getId() + " where reader_id='" + reader_id + "'";
+            int code = statement.executeUpdate(sql);
+            if (code == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
+    }
+
+    @Override
+    public Integer findEmptyListInReaderListByReaderId(Integer reader_id) throws Exception {
+        Integer number = -1;
+        try {
+            statement = con.createStatement();
+            String sql = "select * from reader_list where reader_id='" + reader_id + "'";
+            ResultSet set = statement.executeQuery(sql);
+            if (set.next()) {
+                System.out.println(set.getInt(2) + "," + set.getInt(3) + "," + set.getInt(4));
+                if (set.getInt(2) == 0)
+                    return 1;
+                if (set.getInt(3) == 0)
+                    return 2;
+                if (set.getInt(4) == 0)
+                    return 3;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
+        return number;
+    }
+
+    @Override
+    public void insertNewReaderListByIdFromReader(Integer id) throws Exception {
+        try {
+            statement = con.createStatement();
+            String sql = "insert into reader_list values(" + id + ",'','','')";
+            int code = statement.executeUpdate(sql);
+            if (code == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
+    }
+
+    @Override
+    public DVD borrow(int id, Reader reader) throws Exception {
         //TODO: fix update failed,find new way borrow;
         DVD dvd = null;
         Time time = null;
         try {
             dvd = getDVDById(id);
+            if (dvd.getState() == State.NOT_AVAI) {
+                System.out.println("该书不可借!");
+                throw new Exception();
+            }
+
             statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from time where serial='" + dvd.getTime().getSerial() + "'");
             if (resultSet.next()) {
                 date = new java.util.Date();
-                time = new Time.Builder().setId(resultSet.getInt(1)).setBorrowTime(dateShort()).build();
+                time = new Time.Builder()
+                        .setId(dvd.getTime().getId())
+                        .setBorrowTime(dateShort())
+                        .setRevertTime(dvd.getTime().getRevertTime())
+                        .setRenewTime(dvd.getTime().getRenewTime())
+                        .setSerial(dvd.getTime().getSerial())
+                        .build();
+//                System.out.println(time.toString());
             }
+
             dvd.setTime(time);
+            assert time != null;
+            // update time to table ,for reader time
+            updateTimeBySerial(time.getSerial(), time);
+            // insert into reader_dvd_list,passing from lab
+            updateReaderListByReaderId(reader.getId(), dvd);
+            // set dvd state to not_avail
+            updateDVDById(dvd.getId(), dvd);
         } catch (SQLException throwables) {
             System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
-        } catch (Exception e) {
-            System.out.println("借阅失败,请重试或联系管理员!");
         }
         return dvd;
+    }
+
+    private void updateDVDById(int id, DVD dvd) throws Exception {
+        try {
+            statement = con.createStatement();
+            String sql = "update dvd set state=" + (dvd.getState() == State.ON_SHELF ? 1 : 0) + " where id=" + dvd.getId();
+            int code = statement.executeUpdate(sql);
+            if (code == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
     }
 
     @Override
@@ -91,8 +188,11 @@ public class MDBOperator implements DVDOperate, MDBOperation {
         try {
             statement = con.createStatement();
             statement.executeQuery("insert into reader values('" + reader.getName() + "'," + reader.getId() + ",'" + reader.getDvd_list_id() + "')");
+            insertNewReaderListByIdFromReader(reader.getId());
         } catch (SQLException throwables) {
             System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        } catch (Exception e) {
+            System.out.println("失败,请重试或联系管理员!ERROR MSG: " + e.getMessage());
         }
     }
 
@@ -116,12 +216,59 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     }
 
     @Override
+    public DVD borrow(int id) {
+        return null;
+    }
+
+    @Override
+    public void insertNewTimeWhenAddDVD(Integer id, String serial) throws Exception {
+        try {
+            statement = con.createStatement();
+            statement.executeQuery("insert into time values('" + id + "','','','','" + serial + "')");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Override
+    public ArrayList<DVD> getAllReaderOwnDVDListByReader(Reader reader) throws Exception {
+        ArrayList<DVD> own = null;
+        int id_1, id_2, id_3;
+        try {
+            statement = con.createStatement();
+            ResultSet set = statement.executeQuery("select * from reader_list where reader_id=" + reader.getId());
+            if (set.next()) {
+                own = new ArrayList<DVD>();
+                id_1 = set.getInt(2);
+                id_2 = set.getInt(3);
+                id_3 = set.getInt(4);
+
+                own.add(getDVDById(id_1));
+                own.add(getDVDById(id_2));
+                own.add(getDVDById(id_3));
+
+                reader.setOwn(own);
+                return own;
+            } else
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        if (own == null)
+            throw new Exception();
+        return own;
+    }
+
+    @Override
     public void addDVD(DVD dvd) {
         try {
             statement = con.createStatement();
             statement.executeQuery("insert into dvd values(" + dvd.getId() + ",'" + dvd.getTime().getSerial() + "'," + (dvd.getState() == State.NOT_AVAI ? 1 : 0) + ",'" + dvd.getName() + "')");
+            insertNewTimeWhenAddDVD(dvd.getTime().getId(), dvd.getTime().getSerial());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -151,6 +298,8 @@ public class MDBOperator implements DVDOperate, MDBOperation {
                         .setState(result.getInt(3) == 0 ? State.ON_SHELF : State.NOT_AVAI)
                         .setName(result.getString(4))
                         .build();
+            } else {
+                return null;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -62,6 +62,11 @@ public class DVDManager implements DVDOperate {
     }
 
     @Override
+    public DVD borrow(int id, Reader reader) throws Exception{
+        return operator.borrow(id,reader);
+    }
+
+    @Override
     public DVD revert(int id) {
         return operator.revert(id);
     }

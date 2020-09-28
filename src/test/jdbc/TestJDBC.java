@@ -16,6 +16,10 @@ public class TestJDBC {
     private SerialNumberGenerator generator = new SerialNumberGenerator(7);
 
     @Test
+    public void testTime(){
+        System.out.println(new Time.Builder().setBorrowTime("jlajdslfas").setId(123123).setRenewTime("klajdsklfa").build().toString());
+    }
+    @Test
     public void testConnect() {
         try {
 //step1 load the driver class
@@ -51,7 +55,11 @@ public class TestJDBC {
         render.setHeaders("ID", "TIME", "STATE", "NAME");
 
         try {
+<<<<<<< HEAD
             operator.updateTimeBySerial("JKKJDF", new Time.Builder().setBorrowTime("NICEPIE").setRevertTime("JKDJFDS").build());
+=======
+            operator.findEmptyListInReaderListByReaderId(123456);
+>>>>>>> master
         } catch (Exception e) {
             e.printStackTrace();
         }

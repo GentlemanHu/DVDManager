@@ -21,6 +21,11 @@ public class ManagerMediator implements DVDMediatorOperate {
 
 
     @Override
+    public DVD borrow(int id, Reader reader) throws Exception{
+        return manager.borrow(id, reader);
+    }
+
+    @Override
     public DVD revert(int id) {
         return null;
     }
@@ -66,10 +71,10 @@ public class ManagerMediator implements DVDMediatorOperate {
     public void addDVD(Scanner sc) {
         DVD dvd = new DVD();
         dvd.setId(generator.getNumber());
-        System.out.println("请输入DVD名称:(如:黄家驹全集)");
+        System.out.println("请输入DVD名称:(如:黄家驹全集,不要有空格)");
         printArrow();
         dvd.setName(sc.next());
-        System.out.println("请输入状态:(0为在库,1为不可借)");
+        System.out.println("请输入状态:(0为在库,1为不可借)\n只能(0,1)");
         printArrow();
         dvd.setState(sc.nextInt() == 0 ? State.ON_SHELF : State.NOT_AVAI);
         printArrow();
@@ -83,10 +88,10 @@ public class ManagerMediator implements DVDMediatorOperate {
         Reader reader = new Reader();
         String name = "";
         reader.setId(generator.getNumber());
-        System.out.println("请输入Reader名字:");
+        System.out.println("请输入Reader名字(不要有空格):");
+        printArrow();
         for (; ; ) {
             name = sc.next();
-            printArrow();
             if (!name.equals("null"))
                 break;
         }
@@ -140,11 +145,20 @@ public class ManagerMediator implements DVDMediatorOperate {
         return reader;
     }
 
-    public DVD borrowById(Scanner sc) {
+    public DVD borrowById(Scanner sc, Reader reader) {
         DVD dvd = null;
-        int id=0;
-        manager.borrow(id);
-
+        int id;
+        System.out.println(ConsoleColors.GREEN+"请输入借阅DVD的id:"+ConsoleColors.RESET);
+        printArrow();
+        id = sc.nextInt();
+        try {
+            dvd = manager.borrow(id, reader);
+            System.out.println(ConsoleColors.BLUE+"借阅成功!"+ConsoleColors.RESET);
+        } catch (Exception e) {
+            System.out.println("借阅失败,请重试或联系管理员!");
+            System.out.println("请检查自己列表是否已满!");
+        }
+        printArrow();
         return dvd;
     }
 

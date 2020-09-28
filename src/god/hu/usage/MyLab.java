@@ -151,6 +151,7 @@ public class MyLab {
                     System.out.println("登录失败,请重试或联系管理员!");
                 else {
                     readerLab();
+                    printer.printReaderLogin();
                 }
                 break;
             default:
@@ -191,7 +192,8 @@ public class MyLab {
             case 1:
                 //TODO: borrow
                 System.out.println("borrow dvd");
-                mediator.borrowById(scanner);
+                printer.printTable();
+                mediator.borrowById(scanner,reader);
                 break;
             case 2:
                 //TODO: revert
@@ -201,8 +203,8 @@ public class MyLab {
                 System.out.println("renew dvd");
                 //TODO: renew
             case 9:
-                System.out.println("print all list of dvd");
-                //TODO: print own list
+                //TODO: fix time ,borrow time,revert time etc.
+                printer.printOwnList(reader);
                 break;
             default:
                 printer.printReaderHelp(reader);
