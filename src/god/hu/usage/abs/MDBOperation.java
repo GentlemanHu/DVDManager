@@ -6,11 +6,25 @@ import god.hu.model.Time;
 
 import java.util.ArrayList;
 
-public interface MDBOperation extends ReaderOperate,DVDOperate{
+public interface MDBOperation extends ReaderOperate, DVDOperate {
     Integer selectCountByName(String name) throws Exception;
+
     ArrayList<DVD> selectAll() throws Exception;
+
     ArrayList<String> selectDistinctName() throws Exception;
-    void updateTimeBySerial(String serial,Time time) throws Exception;
+
+    void updateTimeBySerial(String serial, Time time) throws Exception;
+
+    void updateReaderListByReaderId(Integer reader_id, DVD dvd) throws Exception;
+
+    Integer findEmptyListInReaderListByReaderId(Integer reader_id) throws Exception;
+
+    void insertNewReaderListByIdFromReader(Integer id) throws Exception;
+
+    void insertNewTimeWhenAddDVD(Integer id,String serial) throws Exception;
+
+    ArrayList<DVD> getAllReaderOwnDVDListByReader(Reader reader) throws Exception;
+
     @Override
     default void addReader(Reader reader) {
 
@@ -21,10 +35,7 @@ public interface MDBOperation extends ReaderOperate,DVDOperate{
         return null;
     }
 
-    @Override
-    default DVD borrow(int id) {
-        return null;
-    }
+    DVD borrow(int id, Reader reader) throws Exception;
 
     @Override
     default DVD revert(int id) {

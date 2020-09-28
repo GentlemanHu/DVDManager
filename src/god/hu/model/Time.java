@@ -1,6 +1,17 @@
 package god.hu.model;
 
 public class Time{
+  @Override
+  public String toString() {
+    return "Time{" +
+            "borrowTime='" + borrowTime + '\'' +
+            ", revertTime='" + revertTime + '\'' +
+            ", renewTime='" + renewTime + '\'' +
+            ", id=" + id +
+            ", serial='" + serial + '\'' +
+            '}';
+  }
+
   private String borrowTime;
   private String revertTime;
   private String renewTime;
@@ -53,7 +64,6 @@ public class Time{
     private String revertTime;
     private String renewTime;
     private Integer id;
-    private Time time;
     private String serial;
 
     public Builder setBorrowTime(String time){
@@ -78,7 +88,7 @@ public class Time{
               return this;
     }
     public Time build(){
-      this.time = new Time();
+      Time time = new Time();
       time.setBorrowTime(borrowTime);
       time.setRenewTime(renewTime);
       time.setRevertTime(revertTime);

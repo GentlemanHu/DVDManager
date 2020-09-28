@@ -45,14 +45,35 @@ public class LabPrinter implements TablePrint {
         TableRender render = new TableRender();
         ArrayList<Reader> readers = null;
         try {
-            readers =operator.getReaders();
+            readers = operator.getReaders();
         } catch (Exception e) {
             e.printStackTrace();
         }
         render.setShowVerticalLines(true);
         render.setHeaders("NAME", "ID", "DVD_LIST_ID");
         assert readers != null;
-        readers.forEach(reader -> render.addRow(reader.getName(),reader.getId().toString(),reader.getDvd_list_id().toString()));
+        readers.forEach(reader -> render.addRow(reader.getName(), reader.getId().toString(), reader.getDvd_list_id().toString()));
+        render.print();
+        printArrow();
+    }
+
+    @Override
+    public void printOwnList(Reader reader) {
+        TableRender render = new TableRender();
+
+        try {
+            operator.getAllReaderOwnDVDListByReader(reader);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!");
+        }
+        //TODO: select time message!
+        render.setShowVerticalLines(true);
+        render.setHeaders("ID", "NAME");
+        reader.getOwn().forEach(x -> {
+            if (x != null)
+                render.addRow(x.getId().toString(), x.getName());
+        });
         render.print();
         printArrow();
     }
