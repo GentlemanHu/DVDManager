@@ -77,7 +77,6 @@ public class ManagerMediator implements DVDMediatorOperate {
         System.out.println("请输入状态:(0为在库,1为不可借)\n只能(0,1)");
         printArrow();
         dvd.setState(sc.nextInt() == 0 ? State.ON_SHELF : State.NOT_AVAI);
-        printArrow();
         dvd.setTime(new Time.Builder().setSerial(generator.generate()).setId(generator.getNumber()).build());
         manager.addDVD(dvd);
     }
