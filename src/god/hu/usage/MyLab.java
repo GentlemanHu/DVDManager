@@ -95,7 +95,7 @@ public class MyLab {
 
     public static void exit() {
         System.out.println(ConsoleColors.YELLOW + "-退出系统-");
-        System.out.println("GodLin's Manager 重置中...");
+        System.out.println("GodLin's Manager 退出中...");
         System.out.println("Done!");
         System.exit(0);
     }
@@ -149,8 +149,10 @@ public class MyLab {
                 break;
             case 2:
                 reader = mediator.getReader(scanner);
-                if (reader == null)
+                if (reader == null){
                     System.out.println("登录失败,请重试或联系管理员!");
+                    printer.printArrow();
+                }
                 else {
                     readerLab();
                     printer.printReaderLogin();
