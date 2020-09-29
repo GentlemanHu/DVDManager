@@ -149,9 +149,11 @@ public class MyLab {
                 break;
             case 2:
                 reader = mediator.getReader(scanner);
-                if (reader == null)
+                if (reader == null) {
                     System.out.println("登录失败,请重试或联系管理员!");
-                else {
+                    printer.printArrow();
+                    break;
+                } else {
                     readerLab();
                     printer.printReaderLogin();
                 }
@@ -195,13 +197,13 @@ public class MyLab {
                 //TODO: borrow
                 System.out.println("borrow dvd");
                 printer.printTable();
-                mediator.borrowById(scanner,reader);
+                mediator.borrowById(scanner, reader);
                 break;
             case 2:
                 //TODO: revert
                 System.out.println("revert dvd");
                 printer.printOwnList(reader);
-                mediator.revertById(scanner,reader);
+                mediator.revertById(scanner, reader);
                 break;
             case 3:
                 System.out.println("renew dvd");

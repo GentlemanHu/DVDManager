@@ -1,5 +1,6 @@
 package god.hu.model;
 
+import god.hu.usage.MyLab;
 import god.hu.usage.tool.SerialNumberGenerator;
 import god.hu.usage.tool.cli.ConsoleColors;
 import god.hu.usage.abs.DVDMediatorOperate;
@@ -21,13 +22,13 @@ public class ManagerMediator implements DVDMediatorOperate {
 
 
     @Override
-    public DVD borrow(int id, Reader reader) throws Exception{
+    public DVD borrow(int id, Reader reader) throws Exception {
         return manager.borrow(id, reader);
     }
 
     @Override
     public DVD revert(int id, Reader reader) throws Exception {
-        return manager.revert(id,reader);
+        return manager.revert(id, reader);
     }
 
     @Override
@@ -64,6 +65,7 @@ public class ManagerMediator implements DVDMediatorOperate {
             } else {
                 System.out.println(ConsoleColors.RED + "id无效,请重新输入或联系管理员!" + ConsoleColors.RESET);
                 printArrow();
+                return;
             }
         }
         try {
@@ -128,16 +130,17 @@ public class ManagerMediator implements DVDMediatorOperate {
 
     public Reader getReader(Scanner sc) {
         Reader reader = null;
-        int id;
+        String id;
         for (; ; ) {
             System.out.println("请输入Reader ID登录:");
             printArrow();
-            id = sc.nextInt();
-            if (id != 0)
+            id = sc.next();
+            if (!id.equals("0") && MyLab.isNumber(id))
                 break;
+            else System.out.println("请检查ID是否正确,再重试!");
         }
         try {
-            reader = manager.getReader(id);
+            reader = manager.getReader(Integer.parseInt(id));
             if (reader == null)
                 throw new Exception();
         } catch (Exception e) {
@@ -150,12 +153,12 @@ public class ManagerMediator implements DVDMediatorOperate {
     public DVD borrowById(Scanner sc, Reader reader) {
         DVD dvd = null;
         int id;
-        System.out.println(ConsoleColors.GREEN+"请输入借阅DVD的id:"+ConsoleColors.RESET);
+        System.out.println(ConsoleColors.GREEN + "请输入借阅DVD的id:" + ConsoleColors.RESET);
         printArrow();
         id = sc.nextInt();
         try {
             dvd = manager.borrow(id, reader);
-            System.out.println(ConsoleColors.BLUE+"借阅成功!"+ConsoleColors.RESET);
+            System.out.println(ConsoleColors.BLUE + "借阅成功!" + ConsoleColors.RESET);
         } catch (Exception e) {
             System.out.println("借阅失败,请重试或联系管理员!");
             System.out.println("请检查自己列表是否已满!");
@@ -164,22 +167,23 @@ public class ManagerMediator implements DVDMediatorOperate {
         return dvd;
     }
 
-    public DVD revertById(Scanner sc ,Reader reader){
+    public DVD revertById(Scanner sc, Reader reader) {
         DVD dvd = null;
         int id;
-        System.out.println(ConsoleColors.GREEN+"请输入归还DVD的id:"+ConsoleColors.RESET);
+        System.out.println(ConsoleColors.GREEN + "请输入归还DVD的id:" + ConsoleColors.RESET);
         printArrow();
         id = sc.nextInt();
         try {
-            dvd = manager.revert(id,reader);
-            System.out.println(ConsoleColors.BLUE+"归还成功!"+ConsoleColors.RESET);
+            dvd = manager.revert(id, reader);
         } catch (Exception e) {
             System.out.println("归还失败,请重试或联系管理员!");
             System.out.println("请检查id是否正确!");
         }
+        System.out.println(ConsoleColors.BLUE + "归还成功!" + ConsoleColors.RESET);
         printArrow();
         return dvd;
     }
+
     public void printArrow() {
         System.out.print(ConsoleColors.RED + ">>> " + ConsoleColors.RESET);
     }

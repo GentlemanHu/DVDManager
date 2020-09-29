@@ -106,7 +106,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
 
             String dvd_num = "dvd" + dvd_n + "_id";
             statement = con.createStatement();
-            String sql = "update reader_list set " + dvd_num + "=" + "''" + " where reader_id='" + reader_id + "'";
+            String sql = "update reader_list set " + dvd_num + "=" + "0" + " where reader_id='" + reader_id + "'";
             int code = statement.executeUpdate(sql);
             if (code == 0)
                 throw new Exception();
@@ -271,7 +271,7 @@ public class MDBOperator implements DVDOperate, MDBOperation {
         } catch (SQLException throwables) {
             System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
         }
-        return null;
+        return dvd;
     }
 
     @Override
