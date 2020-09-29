@@ -19,6 +19,8 @@ public interface DVDOperate {
 
     DVD borrow(int id, Reader reader) throws Exception;
 
+    DVD revert(int id, Reader reader) throws Exception;
+
     void removeDVDById(Integer id) throws Exception;
 
     DVD getDVDById(Integer id) throws Exception;
