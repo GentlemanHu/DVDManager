@@ -1,6 +1,5 @@
 package god.hu;
 
-import god.hu.db.MDBOperator;
 import god.hu.usage.MyLab;
 import god.hu.usage.tool.cli.ConsoleColors;
 
@@ -61,6 +60,7 @@ public class Main {
             System.out.println(ConsoleColors.RED + "当前自定义password为:" + args[5] + ConsoleColors.RESET);
         } else {
             System.out.println(ConsoleColors.YELLOW + "参数不正确,请检查!格式\"-pwd password\"" + ConsoleColors.RESET);
+
         }
     }
 }

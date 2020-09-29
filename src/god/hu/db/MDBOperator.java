@@ -96,6 +96,27 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     }
 
     @Override
+    public void removeDVDFromReaderListByReaderId(Integer reader_id, DVD dvd) throws Exception {
+        try {
+            int dvd_n = findMatchFromReaderList(reader_id, dvd.getId());
+            if (dvd_n == -1) {
+                System.out.println("未找到!");
+                throw new Exception();
+            }
+
+            String dvd_num = "dvd" + dvd_n + "_id";
+            statement = con.createStatement();
+            String sql = "update reader_list set " + dvd_num + "=" + "''" + " where reader_id='" + reader_id + "'";
+            int code = statement.executeUpdate(sql);
+            if (code == 0)
+                throw new Exception();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
+    }
+
+    @Override
     public Integer findEmptyListInReaderListByReaderId(Integer reader_id) throws Exception {
         Integer number = -1;
         try {
@@ -110,6 +131,29 @@ public class MDBOperator implements DVDOperate, MDBOperation {
                 if (set.getInt(3) == 0)
                     return 2;
                 if (set.getInt(4) == 0)
+                    return 3;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
+        return number;
+    }
+
+    @Override
+    public Integer findMatchFromReaderList(Integer reader_id, Integer dvd_id) throws Exception {
+        Integer number = -1;
+        try {
+            statement = con.createStatement();
+            String sql = "select * from reader_list where reader_id='" + reader_id + "'";
+            ResultSet set = statement.executeQuery(sql);
+            if (set.next()) {
+                System.out.println(set.getInt(2) + "," + set.getInt(3) + "," + set.getInt(4));
+                if (set.getInt(2) == dvd_id)
+                    return 1;
+                if (set.getInt(3) == dvd_id)
+                    return 2;
+                if (set.getInt(4) == dvd_id)
                     return 3;
             }
         } catch (SQLException throwables) {
@@ -188,6 +232,45 @@ public class MDBOperator implements DVDOperate, MDBOperation {
 
     @Override
     public DVD revert(int id) {
+        return null;
+    }
+
+    @Override
+    public DVD revert(int id, Reader reader) throws Exception {
+        DVD dvd = null;
+        Time time = null;
+        try {
+            dvd = getDVDById(id);
+            if (dvd.getState() == State.ON_SHELF) {
+                System.out.println("该书已归还!如果不正确,请联系管理员.");
+                throw new Exception();
+            }
+
+            statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from time where serial='" + dvd.getTime().getSerial() + "'");
+            if (resultSet.next()) {
+                date = new java.util.Date();
+                time = new Time.Builder()
+                        .setId(dvd.getTime().getId())
+                        .setBorrowTime(dvd.getTime().getBorrowTime())
+                        .setRevertTime(dateShort())
+                        .setRenewTime(dvd.getTime().getRenewTime())
+                        .setSerial(dvd.getTime().getSerial())
+                        .build();
+//                System.out.println(time.toString());
+            }
+
+            dvd.setTime(time);
+            assert time != null;
+            // update time to table ,for reader time
+            updateTimeBySerial(time.getSerial(), time);
+            // remove from reader_dvd_list,passing from lab
+            removeDVDFromReaderListByReaderId(reader.getId(), dvd);
+            // set dvd not_avail to on_shelf
+            updateDVDById(dvd.getId(), dvd);
+        } catch (SQLException throwables) {
+            System.out.println("失败,请重试或联系管理员!ERROR CODE: " + throwables.getErrorCode());
+        }
         return null;
     }
 
@@ -415,4 +498,5 @@ public class MDBOperator implements DVDOperate, MDBOperation {
     private String dateShort() {
         return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
+
 }

@@ -200,9 +200,12 @@ public class MyLab {
             case 2:
                 //TODO: revert
                 System.out.println("revert dvd");
+                printer.printOwnList(reader);
+                mediator.revertById(scanner,reader);
                 break;
             case 3:
                 System.out.println("renew dvd");
+                System.out.println("Not implemented yet");
                 //TODO: renew
             case 9:
                 //TODO: fix time ,borrow time,revert time etc.

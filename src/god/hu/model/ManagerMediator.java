@@ -26,6 +26,11 @@ public class ManagerMediator implements DVDMediatorOperate {
     }
 
     @Override
+    public DVD revert(int id, Reader reader) throws Exception {
+        return manager.revert(id,reader);
+    }
+
+    @Override
     public DVD revert(int id) {
         return null;
     }
@@ -159,6 +164,22 @@ public class ManagerMediator implements DVDMediatorOperate {
         return dvd;
     }
 
+    public DVD revertById(Scanner sc ,Reader reader){
+        DVD dvd = null;
+        int id;
+        System.out.println(ConsoleColors.GREEN+"请输入归还DVD的id:"+ConsoleColors.RESET);
+        printArrow();
+        id = sc.nextInt();
+        try {
+            dvd = manager.revert(id,reader);
+            System.out.println(ConsoleColors.BLUE+"归还成功!"+ConsoleColors.RESET);
+        } catch (Exception e) {
+            System.out.println("归还失败,请重试或联系管理员!");
+            System.out.println("请检查id是否正确!");
+        }
+        printArrow();
+        return dvd;
+    }
     public void printArrow() {
         System.out.print(ConsoleColors.RED + ">>> " + ConsoleColors.RESET);
     }

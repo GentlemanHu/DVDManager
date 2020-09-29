@@ -17,11 +17,15 @@ public interface MDBOperation extends ReaderOperate, DVDOperate {
 
     void updateReaderListByReaderId(Integer reader_id, DVD dvd) throws Exception;
 
+    void removeDVDFromReaderListByReaderId(Integer reader_id, DVD dvd) throws Exception;
+
     Integer findEmptyListInReaderListByReaderId(Integer reader_id) throws Exception;
+
+    Integer findMatchFromReaderList(Integer reader_id,Integer dvd_id) throws Exception;
 
     void insertNewReaderListByIdFromReader(Integer id) throws Exception;
 
-    void insertNewTimeWhenAddDVD(Integer id,String serial) throws Exception;
+    void insertNewTimeWhenAddDVD(Integer id, String serial) throws Exception;
 
     ArrayList<DVD> getAllReaderOwnDVDListByReader(Reader reader) throws Exception;
 

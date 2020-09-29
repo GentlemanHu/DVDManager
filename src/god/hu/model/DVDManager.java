@@ -8,6 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DVDManager implements DVDOperate {
+    private final MDBOperator operator;
+    private volatile ArrayList<DVD> dvds;
+    private ArrayList<Reader> readers;
+    private DVD borrow, revert;
+
+    public DVDManager() {
+        dvds = new ArrayList<DVD>();
+        readers = new ArrayList<Reader>();
+        operator = new MDBOperator();
+    }
+
     public ArrayList<DVD> getDvds() {
         return dvds;
     }
@@ -40,12 +51,6 @@ public class DVDManager implements DVDOperate {
         this.revert = revert;
     }
 
-    public DVDManager() {
-        dvds = new ArrayList<DVD>();
-        readers = new ArrayList<Reader>();
-        operator = new MDBOperator();
-    }
-
     @Override
     public void addReader(Reader reader) {
         operator.addReader(reader);
@@ -62,8 +67,13 @@ public class DVDManager implements DVDOperate {
     }
 
     @Override
-    public DVD borrow(int id, Reader reader) throws Exception{
-        return operator.borrow(id,reader);
+    public DVD borrow(int id, Reader reader) throws Exception {
+        return operator.borrow(id, reader);
+    }
+
+    @Override
+    public DVD revert(int id, Reader reader) throws Exception {
+        return operator.revert(id, reader);
     }
 
     @Override
@@ -84,7 +94,7 @@ public class DVDManager implements DVDOperate {
     }
 
     @Override
-    public void removeDVDById(Integer id) throws Exception{
+    public void removeDVDById(Integer id) throws Exception {
         operator.removeDVDById(id);
     }
 
@@ -102,9 +112,4 @@ public class DVDManager implements DVDOperate {
     public void renew(int id, Time time) {
         dvds.get(id).setTime(time);
     }
-
-    private volatile ArrayList<DVD> dvds;
-    private ArrayList<Reader> readers;
-    private DVD borrow, revert;
-    private final MDBOperator operator;
 }
