@@ -64,7 +64,6 @@ public class ManagerMediator implements DVDMediatorOperate {
                 break;
             } else {
                 System.out.println(ConsoleColors.RED + "id无效,请重新输入或联系管理员!" + ConsoleColors.RESET);
-                printArrow();
                 return;
             }
         }
@@ -158,11 +157,11 @@ public class ManagerMediator implements DVDMediatorOperate {
         id = sc.nextInt();
         try {
             dvd = manager.borrow(id, reader);
-            System.out.println(ConsoleColors.BLUE + "借阅成功!" + ConsoleColors.RESET);
         } catch (Exception e) {
             System.out.println("借阅失败,请重试或联系管理员!");
             System.out.println("请检查自己列表是否已满!");
         }
+        System.out.println(ConsoleColors.BLUE + "借阅成功!" + ConsoleColors.RESET);
         printArrow();
         return dvd;
     }

@@ -95,7 +95,7 @@ public class MyLab {
 
     public static void exit() {
         System.out.println(ConsoleColors.YELLOW + "-退出系统-");
-        System.out.println("GodLin's Manager 重置中...");
+        System.out.println("GodLin's Manager 退出中...");
         System.out.println("Done!");
         System.exit(0);
     }
